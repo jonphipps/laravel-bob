@@ -119,8 +119,6 @@ class EloquentGenerator
 				'#WORD#'		=> Str::classify($rel)
 			);
 
-			print_r($rel_markers);
-
 			$template = Common::get_template('has_many.tpl');
 			$relations .= Common::replace_markers($rel_markers, $template);
 		}

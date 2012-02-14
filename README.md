@@ -2,6 +2,10 @@
 
 ##Installation
 
+```
+php artisan bundle:install bob
+```
+
 ##Usage
 
 ###Controllers
