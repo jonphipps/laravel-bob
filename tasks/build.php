@@ -17,6 +17,7 @@ class Bob_Build_Task extends Task
 
 			$controller_template = file_get_contents(path('bundle').'bob/templates/controller.tpl');
 			$controller_template = str_replace('%%NAME%%', $controller['class'], $controller_template);
+			$controller_template = str_replace('%%LOWER%%', $controller['lower'], $controller_template);
 
 			file_put_contents(path('app').'controllers/'.$controller['lower'].EXT, $controller_template);
 			echo "Controller created.";
