@@ -15,6 +15,8 @@ use Laravel\Str;
  */
 class Bob_Build_Task extends Task
 {
+	private $_use_blade = false;
+
 	/**
 	 * Generate a new controller, and optionaly actions.
 	 *
@@ -24,6 +26,8 @@ class Bob_Build_Task extends Task
 	{
 		// if we don't have at least one param we can't do anything!
 		if (! count($params)) throw new \Exception('Need controller name.');
+
+		$this->_options($params);
 
 		// set the mappings to match the template file
 		$controller['name'] 	= $params[0];
@@ -36,7 +40,15 @@ class Bob_Build_Task extends Task
 		$source = $this->_get_source('controller.tpl', $controller);
 		$this->_new('Controller', $controller['class'] . "_Controller");
 		$this->_new('Action', $controller['lower'] . "@" . $controller['method'] );
-		$this->_new('View', $controller['lower'] . "/" . $controller['method'] . ".blade.php");
+		if($this->_use_blade)
+		{
+			$this->_new('View', $controller['lower'] . "/" . $controller['method'] . ".blade.php");
+		}
+		else
+		{
+			$this->_new('View', $controller['lower'] . "/" . $controller['method'] . ".php");
+		}
+
 
 		// get the actions list
 		$actions = $this->_get_source_multi('action.tpl', $controller);
@@ -51,7 +63,15 @@ class Bob_Build_Task extends Task
 		$source = $this->_get_source('view.tpl', $controller);
 
 		// create the view file
-		$this->_save(path('app').'views/'.$controller['lower'].'/'.$controller['method'].'.blade.php', $source);
+		if($this->_use_blade)
+		{
+			$this->_save(path('app').'views/'.$controller['lower'].'/'.$controller['method'].'.blade.php', $source);
+		}
+		else
+		{
+			$this->_save(path('app').'views/'.$controller['lower'].'/'.$controller['method'].'.php', $source);
+		}
+
 
 		$this->_log('-- YES WE CAN :D -- ');
 	}
@@ -110,8 +130,16 @@ class Bob_Build_Task extends Task
 			$source = $this->_get_source('view.tpl', $map);
 
 			// create the view file, and alert its creation
-			$this->_save(path('app').'views/'.$map['lower'].'/'.$map['method'].'.blade.php', $source);
-			$this->_new('View', $map['lower'] . "/" . $map['method'] . ".blade.php");
+			if ($this->_use_blade)
+			{
+				$this->_save(path('app').'views/'.$map['lower'].'/'.$map['method'].'.blade.php', $source);
+				$this->_new('View', $map['lower'] . "/" . $map['method'] . ".blade.php");
+			}
+			else
+			{
+				$this->_save(path('app').'views/'.$map['lower'].'/'.$map['method'].'.php', $source);
+				$this->_new('View', $map['lower'] . "/" . $map['method'] . ".php");
+			}
 		}
 
 		return $result;
@@ -152,5 +180,11 @@ class Bob_Build_Task extends Task
 	private function _new($type, $name)
 	{
 		$this->_log('[+] ' . $type . "\t\t '" . $name . "'");
+	}
+
+	private function _options($params)
+	{
+		if(isset($_SERVER['CLI']['BLADE'])) $this->_use_blade = true;
+
 	}
 }
