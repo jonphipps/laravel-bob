@@ -1,11 +1,10 @@
 <?php
 
-class %%NAME%% extends Base_Controller {
+class %%CLASS%%_Controller extends Base_Controller {
 
 	public function action_index()
 	{
 		return View::make('%%LOWER%%.index');
 	}
 
-	%%ACTIONS%%
-}
+%%AC%%}
