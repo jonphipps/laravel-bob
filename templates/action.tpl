@@ -1,7 +1,7 @@
-	public function %%1%%_action()
+	public function action_%%NAME%%()
 	{
 		// code here..
 
-		return View::make('%%2%%.%%3%%');
+		return View::make('%%LOWER%%.%%NAME%%');
 	}
 

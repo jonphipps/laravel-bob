@@ -7,4 +7,4 @@ class %%CLASS%%_Controller extends Base_Controller {
 		return View::make('%%LOWER%%.index');
 	}
 
-%%AC%%}
+%%ACTIONS%%}
