@@ -20,4 +20,15 @@ class Bob_Build_Task extends Task
 	{
 		$c = new ControllerGenerator($params);
 	}
+
+	public function model($params)
+	{
+		$e = new EloquentGenerator($params);
+	}
+
+	public function run()
+	{
+		Common::log('Available commands:');
+		Common::log("\t controller");
+	}
 }

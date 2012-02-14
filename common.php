@@ -1,6 +1,7 @@
 <?php
 
 include __DIR__.'/generators/controller.php';
+include __DIR__.'/generators/eloquent.php';
 
 /**
  * Common functions for dealing with templates.
@@ -79,6 +80,11 @@ class Common
 
 		return $template;
 	}
+
+	public static function log($message)
+	{
+		echo $message . "\n";
+	}	
 
 	public static function created($type, $name)
 	{
