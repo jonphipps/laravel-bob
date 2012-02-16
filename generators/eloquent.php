@@ -60,26 +60,26 @@ class EloquentGenerator
 							break;
 						case "bt":
 							$this->_belongs_to[] = $parts[1];
-							break;							
+							break;
 						case "has_many":
 							$this->_has_many[] = $parts[1];
 							break;
 						case "hm":
 							$this->_has_many[] = $parts[1];
-							break;							
+							break;
 						case "has_one":
 							$this->_has_one[] = $parts[1];
 							break;
 						case "ho":
 							$this->_has_one[] = $parts[1];
-							break;							
+							break;
 						case "has_and_belongs_to_many":
 							$this->_has_and_belongs_to_many[] = $parts[1];
 							break;
 						case "hbm":
 							$this->_has_and_belongs_to_many[] = $parts[1];
-							break;																											
-					}					
+							break;
+					}
 				}
 			}
 		}
@@ -145,7 +145,7 @@ class EloquentGenerator
 
 			$template = Common::get_template('has_and_belongs_to_many.tpl');
 			$relations .= Common::replace_markers($rel_markers, $template);
-		}		
+		}
 
 		if ($this->_timestamps) $relations = "\n\n".$relations;
 
@@ -174,5 +174,6 @@ class EloquentGenerator
 	private function _settings()
 	{
 		if (isset($_SERVER['CLI']['TIMESTAMPS'])) $this->_timestamps = true;
+		if (isset($_SERVER['CLI']['TS'])) $this->_timestamps = true;
 	}
 }
