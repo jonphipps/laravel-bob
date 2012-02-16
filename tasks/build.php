@@ -1,34 +1,67 @@
 <?php
 
-use Laravel\CLI\Tasks\Task;
-
-include __DIR__.'/../common.php';
-
 /**
- * Common functions for dealing with templates.
- *
- * @author  Dayle Rees.
- * @copyright  Dayle Rees 2012.
- * @package  bob
+ * The main task for the Bob generator, commands are passed as
+ * arguments to run()
+ * 
+ * @package bob
+ * @author Dayle Rees
+ * @copyright Dayle Rees 2012
  */
 class Bob_Build_Task extends Task
 {
+	// the primary command
+	private $_command = 'help';
+
+	// arguments to the primary command
+	private $_args = array();
+
+
 	/**
-	 * Engage controller creation! MAKE IT SO
+	 * run() is the start-point of the CLI request, the
+	 * first argument specifies the command, and sub-sequent
+	 * arguments are passed as arguments to the chosen generator.
+	 * 
+	 * @param $arguments array The command and its arguments.
+	 * @return void
 	 */
-	public function controller($params)
+	public function run($arguments = array())
 	{
-		$c = new ControllerGenerator($params);
+		if (! count($arguments)) $this->_help();
+
+		// assign the params
+		$this->_command = Str::lower($arguments[0]);
+		$this->_args = array_slice($arguments, 1);
+
+		// fire off the navigation
+		$this->_navigate();
 	}
 
-	public function model($params)
+	/**
+	 * Determine the active command and fire off
+	 * a suitable generation handler.
+	 * 
+	 * @return void
+	 */
+	private function _navigate()
 	{
-		$e = new EloquentGenerator($params);
+		switch($this->_command)
+		{
+			case "controller":
+			case "c":
+				Generators_Controller::go($this->_args);
+				break;
+		}
 	}
 
-	public function run()
+	/**
+	 * Show a short version of the documentation to hint
+	 * at command names, with an example.
+	 * 
+	 * @return void
+	 */
+	private function _help()
 	{
-		Common::log('Available commands:');
-		Common::log("\t controller");
+		Common::error('Please specify a command.');
 	}
 }

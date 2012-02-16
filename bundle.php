@@ -1,3 +1,5 @@
 <?php
 
-return array('name' => 'bob');
+return array(
+	'name' => 'bob'
+);
