@@ -18,7 +18,7 @@ class Common
 	 */
 	public static function log($message)
 	{
-		echo $message . CRLF;
+		echo $message . PHP_EOL;
 	}
 
 	/**
@@ -27,7 +27,7 @@ class Common
 	 */
 	public static function error($message)
 	{
-		throw new \Exception($message . CRLF);
+		throw new \Exception($message . PHP_EOL);
 	}
 
 	/**
@@ -41,11 +41,11 @@ class Common
 	{
 		// first look in the project templates this way
 		// the user can have project-specific templating
-		if(File::exists($source = Config::get('bob::bob.project_templates').$template_name))
+		if(File::exists($source = Config::get('bob::options.project_templates').$template_name))
 		{
 			return File::get($source);
 		}
-		elseif(File::exists($source = Config::get('bob::bob.project_templates').$template_name))
+		elseif(File::exists($source = Config::get('bob::options.project_templates').$template_name))
 		{
 			return File::get($source);
 		}

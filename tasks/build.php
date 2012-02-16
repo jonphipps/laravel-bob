@@ -51,6 +51,8 @@ class Bob_Build_Task extends Task
 			case "c":
 				Generators_Controller::go($this->_args);
 				break;
+			case "alias":
+				Generators_Alias::go($this->_args);
 		}
 	}
 
