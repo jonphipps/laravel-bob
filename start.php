@@ -1,5 +1,5 @@
 <?php
 
-Autoloader::psr(array(
+Autoloader::directories(array(
 	Bundle::path('bob').'classes'
 ));
