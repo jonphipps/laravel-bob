@@ -101,6 +101,11 @@ class Common
 			// force the directory creation
 			@mkdir(dirname($file['location']) , 0777, true);
 
+			if(@File::exists($file['location']))
+			{
+				static::log('(~) '.$file['type']."\t\t".$file['name'].' (Exists - Skipped)');
+				continue;
+			}
 			// try to create the file
 			if(@File::put($file['location'], $file['content']))
 			{
@@ -112,5 +117,7 @@ class Common
 				static::error('Could not write to location : ' .$file['location']);
 			}
 		}
+
+		static::log('--ALL-DONE!-----------------------------------');
 	}
 }

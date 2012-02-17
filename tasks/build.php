@@ -53,6 +53,8 @@ class Bob_Build_Task extends Task
 	 */
 	private function _navigate()
 	{
+		Common::log('--B-O-B---------------------------------------');
+
 		switch($this->_command)
 		{
 			case "controller":
@@ -69,6 +71,9 @@ class Bob_Build_Task extends Task
 			case "migration":
 			case "mig":
 				IoC::resolve('task: migrate')->make($this->_args);
+				break;
+			default:
+				$this->_help();
 				break;
 
 
