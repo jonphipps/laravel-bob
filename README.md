@@ -2,7 +2,7 @@
 
 Bob can be used to generate all kinds of useful files and classes, for use with the wonderfully fabulous Laravel PHP Framework, authored by Taylor Otwell.
 
-Bob was created by Dayle Rees, and thanks to Phill Sparks, Eric Barnes and Taylor Otwell for all the help and support.
+Bob was created by Dayle Rees, with thanks to Phill Sparks, Eric Barnes and Taylor Otwell for all the help and support.
 
 ##Installation
 
@@ -40,7 +40,7 @@ bob <command> [argument] [argument] [--config]
 
 ## Generation Reference
 
-Most of the commands, can generate code for a bundle, to specify that you wish to do so, simply add the bundle name, and a double colon before the class name, for example :
+Most of the commands, can generate code for a bundle, to specify that you wish to do so, simply add the bundle name and a double colon before the class name, for example :
 
 ```
 bob controller bundle::class
@@ -48,14 +48,43 @@ bob controller bundle::class
 
 ###Controllers
 
-Controllers can be generated for the Laravel application itself, or even a registered Laravel bundle.
-
-To generate actions, with view files, simply pass the action names as extra arguments to the `controller` command :
+To generate controllers with actions, and view files, simply pass the action names as extra arguments to the `controller` command :
 
 ```
-bob controller <controller_name> [<first_action> <second_action> ...]
+bob controller <controller_name> [first_action] [second_action] ...
 ```
 
-**Note : You can use the shortcut `bob c` instead of `bob controller` to save characters.
+**Note : You can use the shortcut `bob c` instead of `bob controller` to save characters.**
 
 Use the `--blade` switch anywhere within the command to generate view files with the Blade extension (.blade.php).
+
+###Models
+
+To generate Eloquent models, simply use the `model` command :
+
+```
+bob controller <model> [relationship] [relationship] ...
+```
+**Note : You can use the shortcut `bob m` instead of `bob model` to save characters.**
+
+Relationships can be defined in the format :
+
+```
+relationship_type:object_name
+```
+
+for example :
+
+```
+bob controller users has_many:task
+```
+**Note: Always use the singular when generating relationships, if plurals are defined in the laravel `strings.php` file, they will be converted automatically.**
+
+Here is a list of acceptable relationships, and their shortcuts :
+
+* has_many or hm
+* has_one or ho
+* belongs_to or bt
+* has_and_belongs_to_many or hbm
+
+You can also add automatic timestamps to your models by adding the switch `--timestamps` or `--ts`. Remember to create the updated_at and created_at fields to your database.
