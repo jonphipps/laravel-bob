@@ -63,7 +63,7 @@ Use the `--blade` switch anywhere within the command to generate view files with
 To generate Eloquent models, simply use the `model` command :
 
 ```
-bob controller <model> [relationship] [relationship] ...
+bob model <model> [relationship] [relationship] ...
 ```
 **Note : You can use the shortcut `bob m` instead of `bob model` to save characters.**
 
@@ -76,7 +76,7 @@ relationship_type:object_name
 for example :
 
 ```
-bob controller users has_many:task
+bob model users has_many:task
 ```
 **Note: Always use the singular when generating relationships, if plurals are defined in the laravel `strings.php` file, they will be converted automatically.**
 
@@ -88,3 +88,37 @@ Here is a list of acceptable relationships, and their shortcuts :
 * has_and_belongs_to_many or hbm
 
 You can also add automatic timestamps to your models by adding the switch `--timestamps` or `--ts`. Remember to create the updated_at and created_at fields to your database.
+
+###Migrations
+
+Artisan is already able to generate migrations, however I have provided a handy 'wrapper' method to bob to enable quick creation.
+
+To make a new migration simply use the format :
+
+```
+bob migration <migration_name>
+```
+**Note : You can use the shortcut `bob mig` instead of `bob migration` to save characters.**
+
+For more information and switches, see the Laravel documentation.
+
+
+##Project Specific Templates
+
+Bob templates can be customized on a per project basis, to add custom templates simply copy the files at
+
+```
+/bundles/bob/templates/*
+```
+
+to
+
+```
+/application/bob/*
+```
+
+You may then customize the templates within the bob folder, markers are displayed with #symbols#.
+
+===================
+
+More to come soon! Thanks for using Bob!
