@@ -10,16 +10,46 @@
  */
 class Generators_Controller
 {
-	// the name of the controller and an array of actions
+	/**
+	 * The name of the controller, from task parameters.
+	 *
+	 * @var string
+	 */
 	private static $_controller_name;
+
+	/**
+	 * The controller actions, specified as additional "words".
+	 *
+	 * @var array
+	 */
 	private static $_controller_actions;
 
-	// the view extension and bundle name/path
+	/**
+	 * The view file extension, can also be blade.php
+	 *
+	 * @var string
+	 */
 	private static $_view_extension = EXT;
+
+	/**
+	 * The name of the bundle.
+	 *
+	 * @var string
+	 */
 	private static $_bundle;
+
+	/**
+	 * The path to the bundle.
+	 *
+	 * @var string
+	 */
 	private static $_bundle_path;
 
-	// array of files to write when generating
+	/**
+	 * An array of files to write after generation.
+	 *
+	 * @var array
+	 */
 	private static $_files = array();
 
 
@@ -52,6 +82,9 @@ class Generators_Controller
 		// slice out extra words as command params
 		static::$_controller_actions = array_slice($params, 1);
 
+		// load any command line switches
+		static::_settings();
+
 		// start the generation
 		static::_controller_generation();
 
@@ -64,7 +97,7 @@ class Generators_Controller
 	 * source from the templates, and populating the
 	 * files array.
 	 *
-	 * @return  void
+	 * @return void
 	 */
 	private static function _controller_generation()
 	{
@@ -118,5 +151,16 @@ class Generators_Controller
 		);
 
 		static::$_files[] = $controller;
+	}
+
+	/**
+	 * Alter generation settings from artisan
+	 * switches.
+	 *
+	 * @return void
+	 */
+	private static function _settings()
+	{
+		if(isset($_SERVER['CLI']['BLADE'])) static::$_view_extension = BLADE_EXT;
 	}
 }

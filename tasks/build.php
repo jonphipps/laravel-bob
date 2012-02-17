@@ -10,10 +10,18 @@
  */
 class Bob_Build_Task extends Task
 {
-	// the primary command
+	/**
+	 * The default command, show help.
+	 *
+	 * @var string
+	 */
 	private $_command = 'help';
 
-	// arguments to the primary command
+	/**
+	 * Arguments to the command.
+	 *
+	 * @var array
+	 */
 	private $_args = array();
 
 
@@ -56,7 +64,7 @@ class Bob_Build_Task extends Task
 				break;
 			case "migration":
 			case "mig":
-				// hmm
+				IoC::resolve('task: migrate')->make($this->_args);
 				break;
 
 
