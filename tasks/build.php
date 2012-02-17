@@ -38,7 +38,7 @@ class Bob_Build_Task extends Task
 		if (! count($arguments)) $this->_help();
 
 		// assign the params
-		$this->_command = Str::lower($arguments[0]);
+		$this->_command = $arguments[0];
 		$this->_args = array_slice($arguments, 1);
 
 		// fire off the navigation
@@ -71,6 +71,14 @@ class Bob_Build_Task extends Task
 			case "migration":
 			case "mig":
 				IoC::resolve('task: migrate')->make($this->_args);
+				break;
+			case "bundle":
+			case "b":
+				Generators_Bundle::go($this->_args);
+				break;
+			case "test":
+			case "t":
+				Generators_Test::go($this->_args);
 				break;
 			default:
 				$this->_help();

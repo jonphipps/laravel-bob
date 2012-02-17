@@ -91,7 +91,7 @@ class Common
 	 * @param array The files array.
 	 * @return void
 	 */
-	public static function save($files)
+	public static function save($files = array())
 	{
 		/** TODO sort array by type uasort() with cb */
 
@@ -119,5 +119,39 @@ class Common
 		}
 
 		static::log('--ALL-DONE!-----------------------------------');
+	}
+
+	/**
+	 * Copy a directory of templates to a destination.
+	 *
+	 * <code>
+	 * $dirs[] = array(
+	 * 		'type' 			=> 'View',
+	 *   	'name' 			=> 'Descriptive identifier shown to terminal.',
+	 *    	'source' 		=> 'the/location/to/copy/from',
+	 *     	'destination' 	=> 'the/location/to/copy/to'
+	 * );
+	 * </code>
+	 *
+	 * @param array The array of files to copy.
+	 * @return void
+	 */
+	public static function move_template($dirs = array())
+	{
+		// loop through dirs to copy
+		foreach ($dirs as $dir)
+		{
+			if(! is_dir($dir['destination']))
+			{
+				File::cpdir($dir['source'], $dir['destination']);
+				// log something pretty to the terminal
+				static::log('(+) '.$dir['type']."\t\t".$dir['name']);
+			}
+			else
+			{
+				// we cant copy if its already there
+				static::error('The bundle \''.$dir['name'].'\' already exists.');
+			}
+		}
 	}
 }
