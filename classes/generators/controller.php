@@ -25,6 +25,13 @@ class Generators_Controller
 	private static $_controller_actions;
 
 	/**
+	 * Extra path from the controller name.
+	 *
+	 * @var string
+	 */
+	private static $_path = '';	
+
+	/**
 	 * The view file extension, can also be blade.php
 	 *
 	 * @var string
@@ -76,8 +83,26 @@ class Generators_Controller
 		static::$_bundle_path = (static::$_bundle == DEFAULT_BUNDLE)
 				? path('app') : path('bundle').static::$_bundle;
 
-		// get the controller name from the first argument
-		static::$_controller_name = Bundle::element(Str::lower($params[0]));
+		$element = Bundle::element($params[0]);
+
+		if(strstr($element, '.'))
+		{
+			$parts = explode('.', Str::lower($element));
+
+			static::$_controller_name = $parts[count($parts) - 1];
+
+			$path_parts = array_slice($parts, 0, -1);
+
+			if(count($path_parts))
+			{
+				static::$_path = implode('/', array_slice($parts, 0, -1)) . '/';
+			}
+		}
+		else
+		{
+			// get the controller name from the first argument
+			static::$_controller_name = Bundle::element(Str::lower($params[0]));
+		}
 
 		// slice out extra words as command params
 		static::$_controller_actions = array_slice($params, 1);
@@ -103,6 +128,11 @@ class Generators_Controller
 	{
 		// prefix with bundle, if not in application
 		$class = (static::$_bundle !== DEFAULT_BUNDLE) ? Str::classify(static::$_bundle).'_' : '';
+
+		if(static::$_path !== '')
+		{
+			$class = Str::classify(str_replace('/', '_', static::$_path));
+		}
 
 		// set up the markers for replacement within source
 		$markers = array(
@@ -130,8 +160,8 @@ class Generators_Controller
 			// add a replaced view to the files array
 			$view = array(
 				'type'		=> 'View',
-				'name'		=> $markers['#LOWER#'].'/'.$markers['#ACTION#'].static::$_view_extension,
-				'location'	=> static::$_bundle_path.'/views/'.$markers['#LOWER#'].'/'.$markers['#ACTION#'].static::$_view_extension,
+				'name'		=> static::$_path.$markers['#LOWER#'].'/'.$markers['#ACTION#'].static::$_view_extension,
+				'location'	=> static::$_bundle_path.'/views/'.static::$_path.$markers['#LOWER#'].'/'.$markers['#ACTION#'].static::$_view_extension,
 				'content'	=> Common::replace_markers($markers, $view_template)
 			);
 
@@ -146,7 +176,7 @@ class Generators_Controller
 		$controller = array(
 			'type'		=> 'Controller',
 			'name'		=> $markers['#CLASS#'].'_Controller',
-			'location'	=> static::$_bundle_path.'/controllers/'.$markers['#LOWER#'].EXT,
+			'location'	=> static::$_bundle_path.'/controllers/'.static::$_path.$markers['#LOWER#'].EXT,
 			'content'	=> Common::replace_markers($markers, $template)
 		);
 
