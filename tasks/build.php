@@ -3,7 +3,7 @@
 /**
  * The main task for the Bob generator, commands are passed as
  * arguments to run()
- * 
+ *
  * @package bob
  * @author Dayle Rees
  * @copyright Dayle Rees 2012
@@ -21,7 +21,7 @@ class Bob_Build_Task extends Task
 	 * run() is the start-point of the CLI request, the
 	 * first argument specifies the command, and sub-sequent
 	 * arguments are passed as arguments to the chosen generator.
-	 * 
+	 *
 	 * @param $arguments array The command and its arguments.
 	 * @return void
 	 */
@@ -40,7 +40,7 @@ class Bob_Build_Task extends Task
 	/**
 	 * Determine the active command and fire off
 	 * a suitable generation handler.
-	 * 
+	 *
 	 * @return void
 	 */
 	private function _navigate()
@@ -53,13 +53,20 @@ class Bob_Build_Task extends Task
 				break;
 			case "alias":
 				Generators_Alias::go($this->_args);
+				break;
+			case "migration":
+			case "mig":
+				// hmm
+				break;
+
+
 		}
 	}
 
 	/**
 	 * Show a short version of the documentation to hint
 	 * at command names, with an example.
-	 * 
+	 *
 	 * @return void
 	 */
 	private function _help()
