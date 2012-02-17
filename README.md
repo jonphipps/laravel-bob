@@ -1,5 +1,7 @@
 #Bob
 
+![Bob Logo](http://daylerees.com/boblogo.png)
+
 Bob can be used to generate all kinds of useful files and classes, for use with the wonderfully fabulous Laravel PHP Framework, authored by Taylor Otwell.
 
 Bob was created by Dayle Rees, with thanks to Phill Sparks, Eric Barnes and Taylor Otwell for all the help and support.
