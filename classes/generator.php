@@ -17,7 +17,7 @@ class Generator
 		if(isset($args[0]))
 		{
 			// check to see if its bundle prefixed
-			if(ststr($args[0], '::'))
+			if(strstr($args[0], '::'))
 			{
 				$parts = explode('::', $args[0]);
 
@@ -33,15 +33,15 @@ class Generator
 			}
 
 			// if we have a multi-level path
-			if(ststr($args[0], '.'))
+			if(strstr($args[0], '.'))
 			{
 				$parts = explode('.', $args[0]);
 
 				// form the class prefix as in Folder_Folder_Folder_
-				$this->class_prefix = Str::classify(implode('_', array_slice($parts, -1)).'_');
+				$this->class_prefix = Str::classify(implode('_', array_slice($parts,0, -1)).'_');
 
 				// form the path to the class
-				$this->class_path = implode('/', array_slice($parts, -1)).'/';
+				$this->class_path = implode('/', array_slice($parts,0, -1)).'/';
 
 				// unaltered case class
 				$this->standard = $parts[count($parts) -1];
@@ -62,7 +62,12 @@ class Generator
 
 				// get our class name
 				$this->class = Str::classify($args[0]);
+
+
 			}
 		}
+
+
+		print_r($this);
 	}
 }
