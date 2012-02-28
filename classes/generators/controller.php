@@ -56,11 +56,14 @@ class Generators_Controller extends Generator
 	 */
 	private function _controller_generation()
 	{
+		$prefix = ($this->bundle == DEFAULT_BUNDLE) ? '' : Str::classify($this->bundle).'_';
+		$view_prefix = ($this->bundle == DEFAULT_BUNDLE) ? '' : $this->bundle.'::';
+
 		// set up the markers for replacement within source
 		$markers = array(
-			'#CLASS#'		=> $this->class_prefix.$this->class,
+			'#CLASS#'		=> $prefix.$this->class_prefix.$this->class,
 			'#LOWER#'		=> $this->lower,
-			'#LOWERFULL#'	=> Str::lower(str_replace('/','.', $this->class_path).$this->lower)
+			'#LOWERFULL#'	=> $view_prefix.Str::lower(str_replace('/','.', $this->class_path).$this->lower)
 		);
 
 		// loud our controller template
