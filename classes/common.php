@@ -27,7 +27,8 @@ class Common
 	 */
 	public static function error($message)
 	{
-		throw new \Exception($message . PHP_EOL);
+		Common::log(chr(27).'[31m'.$message);
+		throw new \Exception(chr(27).'[36m'.'-- Apparently not! :( --' . PHP_EOL);
 	}
 
 	/**
