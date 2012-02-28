@@ -75,7 +75,7 @@ class Generators_Controller extends Generator
 			// add a replaced view to the files array
 			$view = array(
 				'type'		=> 'View',
-				'name'		=> $this->class_path.$this->lower.'/'.Str::lower($action).'/'.Str::lower($action).$this->_view_extension,
+				'name'		=> $this->class_path.$this->lower.'/'.Str::lower($action).$this->_view_extension,
 				'location'	=> $this->bundle_path.'/views/'.$this->class_path.$this->lower.'/'.Str::lower($action).$this->_view_extension,
 				'content'	=> Common::replace_markers($markers, $view_template)
 			);

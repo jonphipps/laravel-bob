@@ -103,14 +103,14 @@ class Common
 
 			if(@File::exists($file['location']))
 			{
-				static::log('(~) '.$file['type']."\t\t".$file['name'].' (Exists - Skipped)');
+				static::log(chr(27).'[36m'.'('.chr(27).'[33m'.'~'.chr(27).'[36m'.') '.chr(27).'[33m'.$file['type'].chr(27).'[37m'."\t\t".$file['name'].' (Exists - Skipped)');
 				continue;
 			}
 			// try to create the file
 			if(@File::put($file['location'], $file['content']))
 			{
 				// log something pretty to the terminal
-				static::log('(+) '.$file['type']."\t\t".$file['name']);
+				static::log(chr(27).'[36m'.'('.chr(27).'[32m'.'+'.chr(27).'[36m'.') '.chr(27).'[33m'.$file['type'].chr(27).'[37m'."\t\t".$file['name']);
 			}
 			else
 			{
@@ -118,7 +118,7 @@ class Common
 			}
 		}
 
-		static::log('--ALL-DONE!-----------------------------------');
+		static::log(chr(27).'[36m'.'-- Yes we can! --');
 	}
 
 	/**

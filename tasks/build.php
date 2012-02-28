@@ -53,7 +53,7 @@ class Bob_Build_Task extends Task
 	 */
 	private function _navigate()
 	{
-		Common::log(chr(27).'[36m'.'--B-O-B---------------------------------------'.chr(27)."[0m");
+		Common::log(chr(27).'[36m'.'-- Can we build it? --');
 
 		switch($this->_command)
 		{
