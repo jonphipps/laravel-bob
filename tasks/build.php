@@ -38,6 +38,8 @@ class Bob_Build_Task extends Task
 	{
 		if (! count($arguments)) $this->_help();
 
+		Common::settings();
+
 		// assign the params
 		$this->_command = $arguments[0];
 		$this->_args = array_slice($arguments, 1);

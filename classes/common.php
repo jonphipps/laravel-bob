@@ -12,6 +12,20 @@
 class Common
 {
 	/**
+	 * Force overwrite of existing files.
+	 * 
+	 * @var boolean
+	 */
+	private static $_force = false;
+
+	/**
+	 * Preview changes without writing files.
+	 * 
+	 * @var boolean
+	 */
+	private static $_preview = false;
+
+	/**
 	 * Log a message to the CLI with a \r\n
 	 *
 	 * @param $message string The message to display.
@@ -101,23 +115,33 @@ class Common
 		foreach($files as $file)
 		{
 			// force the directory creation
-			@mkdir(dirname($file['location']) , 0777, true);
+			if(! static::$_preview) @mkdir(dirname($file['location']) , 0777, true);
 
-			if(@File::exists($file['location']))
+			if(@File::exists($file['location']) && (static::$_force == false))
 			{
 				static::log(chr(27).'[36m'.'('.chr(27).'[33m'.'~'.chr(27).'[36m'.') '.chr(27).'[33m'.$file['type'].chr(27).'[37m'."\t\t".$file['name'].' (Exists - Skipped)');
 				continue;
 			}
-			// try to create the file
-			if(@File::put($file['location'], $file['content']))
+			
+			// if we have preview enabled, we don't want to write files
+			if(! static::$_preview)
 			{
-				// log something pretty to the terminal
-				static::log(chr(27).'[36m'.'('.chr(27).'[32m'.'+'.chr(27).'[36m'.') '.chr(27).'[33m'.$file['type'].chr(27).'[37m'."\t\t".$file['name']);
+				// try to create the file
+				if(@File::put($file['location'], $file['content']))
+				{
+					// log something pretty to the terminal
+					static::log(chr(27).'[36m'.'('.chr(27).'[32m'.'+'.chr(27).'[36m'.') '.chr(27).'[33m'.$file['type'].chr(27).'[37m'."\t\t".$file['name']);
+				}
+				else
+				{
+					static::error('Could not write to location : ' .$file['location']);
+				}
 			}
 			else
 			{
-				static::error('Could not write to location : ' .$file['location']);
+					static::log(chr(27).'[36m'.'('.chr(27).'[32m'.'+'.chr(27).'[36m'.') '.chr(27).'[33m'.$file['type'].chr(27).'[37m'."\t\t".$file['name']);				
 			}
+
 		}
 
 		static::log(chr(27).'[36m'.'-- Yes we can! --');
@@ -145,7 +169,7 @@ class Common
 		{
 			if(! is_dir($dir['destination']))
 			{
-				File::cpdir($dir['source'], $dir['destination']);
+				if(! static::$_preview) File::cpdir($dir['source'], $dir['destination']);
 				// log something pretty to the terminal
 				static::log('(+) '.$dir['type']."\t\t".$dir['name']);
 			}
@@ -155,5 +179,19 @@ class Common
 				static::error('The bundle \''.$dir['name'].'\' already exists.');
 			}
 		}
+	}
+
+	/**
+	 * Set static vars based on CLI switches.
+	 * 
+	 * @return void
+	 */
+	public static function settings()
+	{
+		if(isset($_SERVER['CLI']['FORCE']))
+			static::$_force = true;
+
+		if(isset($_SERVER['CLI']['PREVIEW']))
+			static::$_preview = true;
 	}
 }
