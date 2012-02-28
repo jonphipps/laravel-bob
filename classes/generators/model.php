@@ -55,9 +55,11 @@ class Generators_Model extends Generator
 	 */
 	private function _model_generation()
 	{
+		$prefix = ($this->bundle == DEFAULT_BUNDLE) ? '' : Str::classify($this->bundle).'_';
+
 		// set up the markers for replacement within source
 		$markers = array(
-			'#CLASS#'		=> $this->class_prefix.$this->class,
+			'#CLASS#'		=> $prefix.$this->class_prefix.$this->class,
 			'#LOWER#'		=> $this->lower,
 			'#TIMESTAMPS#'	=> $this->_timestamps
 		);
@@ -123,7 +125,7 @@ class Generators_Model extends Generator
 		// add the replaced model to the files array
 		$model = array(
 			'type'		=> 'Model',
-			'name'		=> $this->class_prefix.$this->class,
+			'name'		=> $prefix.$this->class_prefix.$this->class,
 			'location'	=> $this->bundle_path.'/models/'.$this->class_path.$this->lower.EXT,
 			'content'	=> Common::replace_markers($markers, $template)
 		);
