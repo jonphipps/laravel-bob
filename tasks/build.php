@@ -68,7 +68,8 @@ class Bob_Build_Task extends Task
 				$m->generate();
 				break;
 			case "alias":
-				Generators_Alias::go($this->_args);
+				$a = new Generators_Alias($this->_args);
+				$a->generate();
 				break;
 			case "migration":
 			case "mig":
@@ -76,11 +77,13 @@ class Bob_Build_Task extends Task
 				break;
 			case "bundle":
 			case "b":
-				Generators_Bundle::go($this->_args);
+				$b = new Generators_Bundle($this->_args);
+				$b->generate();
 				break;
 			case "test":
 			case "t":
-				Generators_Test::go($this->_args);
+				$t = new Generators_Test($this->_args);
+				$t->generate();
 				break;
 			default:
 				$this->_help();

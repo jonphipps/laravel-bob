@@ -8,39 +8,28 @@
  * @author Dayle Rees
  * @copyright Dayle Rees 2012
  */
-class Generators_Bundle
+class Generators_Bundle extends Generator
 {
-	/**
-	 * The name of the new bundle.
-	 *
-	 * @var string
-	 */
-	private static $_bundle;
-
 	/**
 	 * Start the generation process.
 	 *
-	 * @param $params array Words supplied to the controller command.
 	 * @return void
 	 */
-	public static function go($params = array())
+	public function generate()
 	{
 		// we need a controller name
-		if (! count($params))
+		if ($this->lower == null)
 			Common::error('You must specify a bundle name.');
-
-		// attempt to get the bundle name, defaults to application
-		static::$_bundle = Str::lower($params[0]);
 
 		// dirs to move
 		$dirs[] = array(
 			'type'			=> 'Bundle',
-			'name'			=> static::$_bundle,
-			'source'		=> Bundle::path('bob').'templates/bundle',
-			'destination'	=> path('bundle').static::$_bundle
+			'name'			=> $this->lower,
+			'source'		=> Bundle::path('bob').'templates/bundle', /** TODO add override path */
+			'destination'	=> path('bundle').$this->lower
 		);
 
 		// move the new template
 		Common::move_template($dirs);
-	}	
+	}
 }

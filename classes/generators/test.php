@@ -8,98 +8,36 @@
  * @author Dayle Rees
  * @copyright Dayle Rees 2012
  */
-class Generators_Test
+class Generators_Test extends Generator
 {
-	/**
-	 * The name of the test case, from task parameters.
-	 *
-	 * @var string
-	 */
-	private static $_test_case;
-
-	/**
-	 * The individual tests, specified as additional "words".
-	 *
-	 * @var array
-	 */
-	private static $_tests;
-
-	/**
-	 * The name of the bundle.
-	 *
-	 * @var string
-	 */
-	private static $_bundle;
-
-	/**
-	 * The path to the bundle.
-	 *
-	 * @var string
-	 */
-	private static $_bundle_path;
 
 	/**
 	 * An array of files to write after generation.
 	 *
 	 * @var array
 	 */
-	private static $_files = array();
+	private $_files = array();
 
 
 	/**
 	 * Start the generation process.
 	 *
-	 * @param $params array Words supplied to the task command.
 	 * @return void
 	 */
-	public static function go($params = array())
+	public function generate()
 	{
 		// we need a task name
-		if (! count($params))
+		if ($this->standard == null)
 			Common::error('You must specify a task name.');
 
-		// attempt to get the bundle name, defaults to application
-		static::$_bundle = Bundle::name(Str::lower($params[0]));
-
-		// make sure it exists
-		if (! Bundle::exists(static::$_bundle))
-			Common::error("The specified bundle does not exist.\nRemember to add your bundle to bundles.php");
-
-		// if its not the default bundle, we need to use the bundles dir
-		static::$_bundle_path = (static::$_bundle == DEFAULT_BUNDLE)
-				? path('app') : path('bundle').static::$_bundle;
-
-		// get the test case name from the first argument
-		if(strstr($params[0], '::'))
-		{
-			$parts = explode('::', $params[0]);
-
-			if(count($parts) == 2)
-			{
-				static::$_test_case = $parts[1];
-			}
-			else
-			{
-				static::$_test_case = $params[0];
-			}
-		}
-		else
-		{
-			static::$_test_case = $params[0];
-		}
-		
-
-		// slice out extra words as command params
-		static::$_tests = array_slice($params, 1);		
-
 		// load any command line switches
-		static::_settings();
+		$this->_settings();
 
 		// start the generation
-		static::_test_generation();
+		$this->_test_generation();
 
 		// save the resulting array
-		Common::save(static::$_files);
+		Common::save($this->_files);
 	}
 
 	/**
@@ -109,14 +47,12 @@ class Generators_Test
 	 *
 	 * @return void
 	 */
-	private static function _test_generation()
+	private function _test_generation()
 	{
-		// prefix with bundle, if not in application
-		$class = (static::$_bundle !== DEFAULT_BUNDLE) ? Str::classify(static::$_bundle).'_' : '';
 
 		// set up the markers for replacement within source
 		$markers = array(
-			'#CLASS#'		=> $class.static::$_test_case
+			'#CLASS#'		=> 'Test'.$this->standard
 		);
 
 		// loud our test case template
@@ -127,7 +63,7 @@ class Generators_Test
 		$task_template 	= Common::load_template('test/test.tpl');
 
 		// loop through our tests
-		foreach (static::$_tests as $test)
+		foreach ($this->arguments as $test)
 		{
 			// add the current task to the markers
 			$markers['#NAME#'] = $test;
@@ -142,13 +78,13 @@ class Generators_Test
 
 		// add the replaced test case to the files array
 		$test_case = array(
-			'type'		=> 'Task',
-			'name'		=> 'Test'.$markers['#CLASS#'],
-			'location'	=> static::$_bundle_path.'/tests/'.Str::lower($markers['#CLASS#']).'.test'.EXT,
+			'type'		=> 'Test',
+			'name'		=> 'Test'.$this->standard,
+			'location'	=> $this->bundle_path.'/tests/'.$this->class_path.$this->lower.'.test'.EXT,
 			'content'	=> Common::replace_markers($markers, $template)
 		);
 
-		static::$_files[] = $test_case;
+		$this->_files[] = $test_case;
 	}
 
 	/**
@@ -157,7 +93,7 @@ class Generators_Test
 	 *
 	 * @return void
 	 */
-	private static function _settings()
+	private function _settings()
 	{
 
 	}
