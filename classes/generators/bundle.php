@@ -4,9 +4,10 @@
  * Generate a new controller class, including actions
  * and views for each action.
  *
- * @package bob
- * @author Dayle Rees
- * @copyright Dayle Rees 2012
+ * @package 	bob
+ * @author 		Dayle Rees
+ * @copyright 	Dayle Rees 2012
+ * @license 	MIT License <http://www.opensource.org/licenses/mit>
  */
 class Generators_Bundle extends Generator
 {

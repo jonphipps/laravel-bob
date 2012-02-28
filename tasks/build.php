@@ -4,9 +4,10 @@
  * The main task for the Bob generator, commands are passed as
  * arguments to run()
  *
- * @package bob
- * @author Dayle Rees
- * @copyright Dayle Rees 2012
+ * @package 	bob
+ * @author 		Dayle Rees
+ * @copyright 	Dayle Rees 2012
+ * @license 	MIT License <http://www.opensource.org/licenses/mit>
  */
 class Bob_Build_Task extends Task
 {

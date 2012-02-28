@@ -4,9 +4,10 @@
  * Generate a new eloquent model, including
  * relationships.
  *
- * @package bob
- * @author Dayle Rees
- * @copyright Dayle Rees 2012
+ * @package 	bob
+ * @author 		Dayle Rees
+ * @copyright 	Dayle Rees 2012
+ * @license 	MIT License <http://www.opensource.org/licenses/mit>
  */
 class Generators_Model extends Generator
 {

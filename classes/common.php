@@ -4,9 +4,10 @@
  * Common is a utility class for the bob
  * generation system.
  *
- * @package bob
- * @author Dayle Rees
- * @copyright Dayle Rees 2012
+ * @package 	bob
+ * @author 		Dayle Rees
+ * @copyright 	Dayle Rees 2012
+ * @license 	MIT License <http://www.opensource.org/licenses/mit>
  */
 class Common
 {
