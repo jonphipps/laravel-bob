@@ -64,7 +64,8 @@ class Bob_Build_Task extends Task
 				break;
 			case "model":
 			case "m":
-				Generators_Model::go($this->_args);
+				$m = new Generators_Model($this->_args);
+				$m->generate();
 				break;
 			case "alias":
 				Generators_Alias::go($this->_args);

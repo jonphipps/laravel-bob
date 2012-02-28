@@ -79,8 +79,5 @@ class Generator
 		}
 
 		$this->arguments = array_slice($args, 1);
-
-
-		print_r($this);
 	}
 }

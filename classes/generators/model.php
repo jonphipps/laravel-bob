@@ -8,87 +8,41 @@
  * @author Dayle Rees
  * @copyright Dayle Rees 2012
  */
-class Generators_Model
+class Generators_Model extends Generator
 {
-	/**
-	 * The name of the model, from task parameters.
-	 *
-	 * @var string
-	 */
-	private static $_model_name;
-
-	/**
-	 * The model relationships, specified as additional "words".
-	 *
-	 * @var array
-	 */
-	private static $_relationships;
-
-	/**
-	 * The name of the bundle.
-	 *
-	 * @var string
-	 */
-	private static $_bundle;
-
-	/**
-	 * The path to the bundle.
-	 *
-	 * @var string
-	 */
-	private static $_bundle_path;
-
 	/**
 	 * Enable the timestamps string in models?
 	 *
 	 * @var string
 	 */
-	private static $_timestamps = '';
+	private $_timestamps = '';
 
 	/**
 	 * An array of files to write after generation.
 	 *
 	 * @var array
 	 */
-	private static $_files = array();
+	private $_files = array();
 
 	/**
 	 * Start the generation process.
 	 *
-	 * @param $params array Words supplied to the controller command.
 	 * @return void
 	 */
-	public static function go($params = array())
+	public function generate()
 	{
 		// we need a controller name
-		if (! count($params))
+		if ($this->class == null)
 			Common::error('You must specify a model name.');
 
-		// attempt to get the bundle name, defaults to application
-		static::$_bundle = Bundle::name(Str::lower($params[0]));
-
-		// make sure it exists
-		if (! Bundle::exists(static::$_bundle))
-			Common::error("The specified bundle does not exist.\nRemember to add your bundle to bundles.php");
-
-		// if its not the default bundle, we need to use the bundles dir
-		static::$_bundle_path = (static::$_bundle == DEFAULT_BUNDLE)
-				? path('app') : path('bundle').static::$_bundle;
-
-		// get the model name from the first argument
-		static::$_model_name = Bundle::element(Str::lower($params[0]));
-
-		// slice out extra words as command params
-		static::$_relationships = array_slice($params, 1);
-
 		// load any command line switches
-		static::_settings();
+		$this->_settings();
 
 		// start the generation
-		static::_model_generation();
+		$this->_model_generation();
 
 		// save the resulting array
-		Common::save(static::$_files);
+		Common::save($this->_files);
 	}
 
 	/**
@@ -98,16 +52,13 @@ class Generators_Model
 	 *
 	 * @return void
 	 */
-	private static function _model_generation()
+	private function _model_generation()
 	{
-		// prefix with bundle, if not in application
-		$class = (static::$_bundle !== DEFAULT_BUNDLE) ? Str::classify(static::$_bundle).'_' : '';
-
 		// set up the markers for replacement within source
 		$markers = array(
-			'#CLASS#'		=> $class.Str::classify(static::$_model_name),
-			'#LOWER#'		=> Str::lower(static::$_model_name),
-			'#TIMESTAMPS#'	=> static::$_timestamps
+			'#CLASS#'		=> $this->class_prefix.$this->class,
+			'#LOWER#'		=> $this->lower,
+			'#TIMESTAMPS#'	=> $this->_timestamps
 		);
 
 		// loud our model template
@@ -117,7 +68,7 @@ class Generators_Model
 		$relationships_source = '';
 
 		// loop through our relationships
-		foreach (static::$_relationships as $relation)
+		foreach ($this->arguments as $relation)
 		{
 			// if we have a valid relation
 			if(! strstr($relation, ':')) continue;
@@ -171,13 +122,13 @@ class Generators_Model
 		// add the replaced model to the files array
 		$model = array(
 			'type'		=> 'Model',
-			'name'		=> $markers['#CLASS#'],
-			'location'	=> static::$_bundle_path.'/models/'.$markers['#LOWER#'].EXT,
+			'name'		=> $this->class_prefix.$this->class,
+			'location'	=> $this->bundle_path.'/models/'.$this->class_path.$this->lower.EXT,
 			'content'	=> Common::replace_markers($markers, $template)
 		);
 
 		// store the file ready for saving
-		static::$_files[] = $model;
+		$this->_files[] = $model;
 	}
 
 	/**
@@ -186,11 +137,11 @@ class Generators_Model
 	 *
 	 * @return void
 	 */
-	private static function _settings()
+	private function _settings()
 	{
 		if(isset($_SERVER['CLI']['TIMESTAMPS']))
-			static::$_timestamps = "\tpublic static \$timestamps = true;\n\n";
+			$this->_timestamps = "\tpublic static \$timestamps = true;\n\n";
 		if(isset($_SERVER['CLI']['TS']))
-			static::$_timestamps = "\tpublic static \$timestamps = true;\n\n";
+			$this->_timestamps = "\tpublic static \$timestamps = true;\n\n";
 	}
 }

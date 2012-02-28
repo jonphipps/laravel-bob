@@ -2,5 +2,4 @@
 
 class #CLASS# extends Eloquent {
 
-#TIMESTAMPS##RELATIONS#
-}
+#TIMESTAMPS##RELATIONS#}
