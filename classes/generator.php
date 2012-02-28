@@ -1,19 +1,89 @@
 <?php
 
+/**
+ * Superclass to process command arguments for
+ * generator classes.
+ *
+ * @package bob
+ * @author Dayle Rees
+ * @copyright Dayle Rees 2012
+ */
 class Generator
 {
+
+	/**
+	 * The arguments as passed to the build script.
+	 *
+	 * @var array
+	 */
 	protected $args;
+
+	/**
+	 * The lowercase bundle name.
+	 *
+	 * @var string
+	 */
 	protected $bundle;
+
+	/**
+	 * The path to the bundle.
+	 *
+	 * @var string
+	 */
 	protected $bundle_path;
+
+	/**
+	 * The class name in unaltered case.
+	 *
+	 * @var string
+	 */
 	protected $standard;
+
+	/**
+	 * The class name in lowercase.
+	 *
+	 * @var string
+	 */
 	protected $lower;
+
+	/**
+	 * The classified class name.
+	 *
+	 * @var string
+	 */
 	protected $class;
+
+	/**
+	 * The class prefix for multi level assets.
+	 *
+	 * @var string
+	 */
 	protected $class_prefix = '';
+
+	/**
+	 * The class path for multi level assets.
+	 *
+	 * @var string
+	 */
 	protected $class_path = '';
+
+	/**
+	 * The extra arguments, passed after class.
+	 *
+	 * @var array
+	 */
 	protected $arguments;
 
+	/**
+	 * Determine class names, identifiers and arguments based on the args
+	 * passed by the build script.
+	 *
+	 * @param array Arguments to the build script.
+	 * @return void
+	 */
 	public function __construct($args)
 	{
+		// set default args
 		$this->args = $args;
 
 		// if we got an argument
@@ -38,9 +108,11 @@ class Generator
 			}
 			else
 			{
+				// use the application folder if no bundle
 				$this->bundle = DEFAULT_BUNDLE;
 			}
 
+			// set bundle path from bundle name
 			$this->bundle_path = Bundle::path($this->bundle);
 
 			// if we have a multi-level path
@@ -78,6 +150,7 @@ class Generator
 			}
 		}
 
+		// pass remaining arguments
 		$this->arguments = array_slice($args, 1);
 	}
 }
