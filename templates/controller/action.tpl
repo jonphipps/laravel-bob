@@ -2,6 +2,6 @@
 	{
 		// code here..
 
-		return View::make('#LOWER#.#ACTION#');
+		return View::make('#LOWERFULL#.#ACTION#');
 	}
 

@@ -1,120 +1,42 @@
 <?php
 
-/**
- * Generate a new controller class, including actions
- * and views for each action.
- *
- * @package bob
- * @author Dayle Rees
- * @copyright Dayle Rees 2012
- */
-class Generators_Controller
+class Generators_Controller extends Generator
 {
-	/**
-	 * The name of the controller, from task parameters.
-	 *
-	 * @var string
-	 */
-	private static $_controller_name;
-
-	/**
-	 * The controller actions, specified as additional "words".
-	 *
-	 * @var array
-	 */
-	private static $_controller_actions;
-
-	/**
-	 * Extra path from the controller name.
-	 *
-	 * @var string
-	 */
-	private static $_path = '';	
 
 	/**
 	 * The view file extension, can also be blade.php
 	 *
 	 * @var string
 	 */
-	private static $_view_extension = EXT;
-
-	/**
-	 * The name of the bundle.
-	 *
-	 * @var string
-	 */
-	private static $_bundle;
-
-	/**
-	 * The path to the bundle.
-	 *
-	 * @var string
-	 */
-	private static $_bundle_path;
+	private $_view_extension = EXT;
 
 	/**
 	 * An array of files to write after generation.
 	 *
 	 * @var array
 	 */
-	private static $_files = array();
+	private $_files = array();
 
 
 	/**
 	 * Start the generation process.
 	 *
-	 * @param $params array Words supplied to the controller command.
 	 * @return void
 	 */
-	public static function go($params = array())
+	public function generate()
 	{
 		// we need a controller name
-		if (! count($params))
+		if ($this->class == null)
 			Common::error('You must specify a controller name.');
 
-		// attempt to get the bundle name, defaults to application
-		static::$_bundle = Bundle::name(Str::lower($params[0]));
-
-		// make sure it exists
-		if (! Bundle::exists(static::$_bundle))
-			Common::error("The specified bundle does not exist.\nRemember to add your bundle to bundles.php");
-
-		// if its not the default bundle, we need to use the bundles dir
-		static::$_bundle_path = (static::$_bundle == DEFAULT_BUNDLE)
-				? path('app') : path('bundle').static::$_bundle;
-
-		$element = Bundle::element($params[0]);
-
-		if(strstr($element, '.'))
-		{
-			$parts = explode('.', Str::lower($element));
-
-			static::$_controller_name = $parts[count($parts) - 1];
-
-			$path_parts = array_slice($parts, 0, -1);
-
-			if(count($path_parts))
-			{
-				static::$_path = implode('/', array_slice($parts, 0, -1)) . '/';
-			}
-		}
-		else
-		{
-			// get the controller name from the first argument
-			static::$_controller_name = Bundle::element(Str::lower($params[0]));
-		}
-
-		// slice out extra words as command params
-		static::$_controller_actions = array_slice($params, 1);
-
 		// load any command line switches
-		static::_settings();
+		$this->_settings();
 
 		// start the generation
-		static::_controller_generation();
+		$this->_controller_generation();
 
 		// save the resulting array
-		Common::save(static::$_files);
+		Common::save($this->_files);
 	}
 
 	/**
@@ -124,20 +46,13 @@ class Generators_Controller
 	 *
 	 * @return void
 	 */
-	private static function _controller_generation()
+	private function _controller_generation()
 	{
-		// prefix with bundle, if not in application
-		$class = (static::$_bundle !== DEFAULT_BUNDLE) ? Str::classify(static::$_bundle).'_' : '';
-
-		if(static::$_path !== '')
-		{
-			$class = Str::classify(str_replace('/', '_', static::$_path));
-		}
-
 		// set up the markers for replacement within source
 		$markers = array(
-			'#CLASS#'		=> $class.Str::classify(static::$_controller_name),
-			'#LOWER#'		=> self::$_controller_name
+			'#CLASS#'		=> $this->class_prefix.$this->class,
+			'#LOWER#'		=> $this->lower,
+			'#LOWERFULL#'	=> Str::lower(str_replace('/','.', $this->class_path).$this->lower)
 		);
 
 		// loud our controller template
@@ -149,7 +64,7 @@ class Generators_Controller
 		$view_template 		= Common::load_template('controller/view.tpl');
 
 		// loop through our actions
-		foreach (static::$_controller_actions as $action)
+		foreach ($this->arguments as $action)
 		{
 			// add the current action to the markers
 			$markers['#ACTION#'] = Str::lower($action);
@@ -160,12 +75,12 @@ class Generators_Controller
 			// add a replaced view to the files array
 			$view = array(
 				'type'		=> 'View',
-				'name'		=> static::$_path.$markers['#LOWER#'].'/'.$markers['#ACTION#'].static::$_view_extension,
-				'location'	=> static::$_bundle_path.'/views/'.static::$_path.$markers['#LOWER#'].'/'.$markers['#ACTION#'].static::$_view_extension,
+				'name'		=> $this->class_path.$this->lower.'/'.Str::lower($action).'/'.Str::lower($action).$this->_view_extension,
+				'location'	=> $this->bundle_path.'/views/'.$this->class_path.$this->lower.'/'.Str::lower($action).$this->_view_extension,
 				'content'	=> Common::replace_markers($markers, $view_template)
 			);
 
-			static::$_files[] = $view;
+			$this->_files[] = $view;
 		}
 
 		// add a marker to replace the actions stub in the controller
@@ -176,11 +91,11 @@ class Generators_Controller
 		$controller = array(
 			'type'		=> 'Controller',
 			'name'		=> $markers['#CLASS#'].'_Controller',
-			'location'	=> static::$_bundle_path.'/controllers/'.static::$_path.$markers['#LOWER#'].EXT,
+			'location'	=> $this->bundle_path.'/controllers/'.$this->class_path.$this->lower.EXT,
 			'content'	=> Common::replace_markers($markers, $template)
 		);
 
-		static::$_files[] = $controller;
+		$this->_files[] = $controller;
 	}
 
 	/**
@@ -189,8 +104,8 @@ class Generators_Controller
 	 *
 	 * @return void
 	 */
-	private static function _settings()
+	private function _settings()
 	{
-		if(isset($_SERVER['CLI']['BLADE'])) static::$_view_extension = BLADE_EXT;
+		if(isset($_SERVER['CLI']['BLADE'])) $this->_view_extension = BLADE_EXT;
 	}
 }

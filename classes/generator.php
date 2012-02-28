@@ -2,17 +2,20 @@
 
 class Generator
 {
-	private $bundle;
-	private $bundle_path;
-	private $standard;
-	private $lower;
-	private $class;
-	private $class_prefix = '';
-	private $class_path = '';
-	private $arguments;
+	protected $args;
+	protected $bundle;
+	protected $bundle_path;
+	protected $standard;
+	protected $lower;
+	protected $class;
+	protected $class_prefix = '';
+	protected $class_path = '';
+	protected $arguments;
 
 	public function __construct($args)
 	{
+		$this->args = $args;
+
 		// if we got an argument
 		if(isset($args[0]))
 		{
@@ -25,12 +28,20 @@ class Generator
 				if((count($parts) == 2) && $parts[0] !== '')
 				{
 					$this->bundle = Str::lower($parts[0]);
-					$this->bundle_path = Bundle::path($this->bundle);
+
+					if(! Bundle::exists($this->bundle))
+						Common::error('The specified bundle does not exist, or is not loaded.');
 
 					// remove the bundle section, we are done with that
 					$args[0] = $parts[1];
 				}
 			}
+			else
+			{
+				$this->bundle = DEFAULT_BUNDLE;
+			}
+
+			$this->bundle_path = Bundle::path($this->bundle);
 
 			// if we have a multi-level path
 			if(strstr($args[0], '.'))
@@ -41,7 +52,7 @@ class Generator
 				$this->class_prefix = Str::classify(implode('_', array_slice($parts,0, -1)).'_');
 
 				// form the path to the class
-				$this->class_path = implode('/', array_slice($parts,0, -1)).'/';
+				$this->class_path = Str::lower(implode('/', array_slice($parts,0, -1)).'/');
 
 				// unaltered case class
 				$this->standard = $parts[count($parts) -1];
@@ -66,6 +77,8 @@ class Generator
 
 			}
 		}
+
+		$this->arguments = array_slice($args, 1);
 
 
 		print_r($this);

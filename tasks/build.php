@@ -53,13 +53,14 @@ class Bob_Build_Task extends Task
 	 */
 	private function _navigate()
 	{
-		Common::log('--B-O-B---------------------------------------');
+		Common::log(chr(27).'[36m'.'--B-O-B---------------------------------------'.chr(27)."[0m");
 
 		switch($this->_command)
 		{
 			case "controller":
 			case "c":
-				Generators_Controller::go($this->_args);
+				$c = new Generators_Controller($this->_args);
+				$c->generate();
 				break;
 			case "model":
 			case "m":
