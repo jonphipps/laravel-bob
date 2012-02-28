@@ -71,6 +71,8 @@ class Generators_Controller extends Generator
 		$action_template 	= Common::load_template('controller/action.tpl');
 		$view_template 		= Common::load_template('controller/view.tpl');
 
+		array_unshift($this->arguments, 'index');
+
 		// loop through our actions
 		foreach ($this->arguments as $action)
 		{
