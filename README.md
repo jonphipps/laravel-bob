@@ -9,6 +9,7 @@ If you have used ruby on rails' generate, or FuelPHP's Oil you will be familiar 
 Bob was created by Dayle Rees, with thanks to Phill Sparks, Eric Barnes and Taylor Otwell for all the help and support.
 
 **Latest Changes:**
+
 * Nested resources can now be generated.
 * PHPUnit tests can now be generated.
 * Bundles can now be generated.
