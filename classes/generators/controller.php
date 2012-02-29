@@ -10,7 +10,6 @@
  */
 class Generators_Controller extends Generator
 {
-
 	/**
 	 * The view file extension, can also be blade.php
 	 *
@@ -19,32 +18,26 @@ class Generators_Controller extends Generator
 	private $_view_extension = EXT;
 
 	/**
-	 * An array of files to write after generation.
-	 *
-	 * @var array
-	 */
-	private $_files = array();
-
-
-	/**
 	 * Start the generation process.
 	 *
 	 * @return void
 	 */
-	public function generate()
+	public function __construct($args)
 	{
+		parent::__construct($args);
+
 		// we need a controller name
 		if ($this->class == null)
 			Common::error('You must specify a controller name.');
 
-		// load any command line switches
+		// set switches
 		$this->_settings();
 
 		// start the generation
 		$this->_controller_generation();
 
-		// save the resulting array
-		Common::save($this->_files);
+		// write filesystem changes
+		$this->writer->write();
 	}
 
 	/**
@@ -85,30 +78,26 @@ class Generators_Controller extends Generator
 			// append the replaces source
 			$actions_source .= Common::replace_markers($markers, $action_template);
 
-			// add a replaced view to the files array
-			$view = array(
-				'type'		=> 'View',
-				'name'		=> $this->class_path.$this->lower.'/'.Str::lower($action).$this->_view_extension,
-				'location'	=> $this->bundle_path.'/views/'.$this->class_path.$this->lower.'/'.Str::lower($action).$this->_view_extension,
-				'content'	=> Common::replace_markers($markers, $view_template)
+			// add the file to be created
+			$this->writer->create_file(
+				'View',
+				$this->class_path.$this->lower.'/'.Str::lower($action).$this->_view_extension,
+				$this->bundle_path.'views/'.$this->class_path.$this->lower.'/'.Str::lower($action).$this->_view_extension,
+				Common::replace_markers($markers, $view_template)
 			);
-
-			$this->_files[] = $view;
 		}
 
 		// add a marker to replace the actions stub in the controller
 		// template
 		$markers['#ACTIONS#'] = $actions_source;
 
-		// add the replace controller to the files array
-		$controller = array(
-			'type'		=> 'Controller',
-			'name'		=> $markers['#CLASS#'].'_Controller',
-			'location'	=> $this->bundle_path.'/controllers/'.$this->class_path.$this->lower.EXT,
-			'content'	=> Common::replace_markers($markers, $template)
+		// added the file to be created
+		$this->writer->create_file(
+			'Controller',
+			$markers['#CLASS#'].'_Controller',
+			$this->bundle_path.'controllers/'.$this->class_path.$this->lower.EXT,
+			Common::replace_markers($markers, $template)
 		);
-
-		$this->_files[] = $controller;
 	}
 
 	/**
@@ -119,6 +108,6 @@ class Generators_Controller extends Generator
 	 */
 	private function _settings()
 	{
-		if(isset($_SERVER['CLI']['BLADE'])) $this->_view_extension = BLADE_EXT;
+		if(Common::config('blade')) $this->_view_extension = BLADE_EXT;
 	}
 }

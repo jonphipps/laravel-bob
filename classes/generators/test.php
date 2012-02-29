@@ -11,22 +11,15 @@
  */
 class Generators_Test extends Generator
 {
-
-	/**
-	 * An array of files to write after generation.
-	 *
-	 * @var array
-	 */
-	private $_files = array();
-
-
 	/**
 	 * Start the generation process.
 	 *
 	 * @return void
 	 */
-	public function generate()
+	public function __construct($args)
 	{
+		parent::__construct($args);
+
 		// we need a task name
 		if ($this->standard == null)
 			Common::error('You must specify a task name.');
@@ -37,8 +30,8 @@ class Generators_Test extends Generator
 		// start the generation
 		$this->_test_generation();
 
-		// save the resulting array
-		Common::save($this->_files);
+		// write filesystem changes
+		$this->writer->write();
 	}
 
 	/**
@@ -77,15 +70,13 @@ class Generators_Test extends Generator
 		// template
 		$markers['#TESTS#'] = $tasks_source;
 
-		// add the replaced test case to the files array
-		$test_case = array(
-			'type'		=> 'Test',
-			'name'		=> 'Test'.$this->standard,
-			'location'	=> $this->bundle_path.'/tests/'.$this->class_path.$this->lower.'.test'.EXT,
-			'content'	=> Common::replace_markers($markers, $template)
+		// add the generated file to the writer
+		$this->writer->create_file(
+			'Test',
+			'Test'.$this->standard,
+			$this->bundle_path.'tests/'.$this->class_path.$this->lower.'.test'.EXT,
+			Common::replace_markers($markers, $template)
 		);
-
-		$this->_files[] = $test_case;
 	}
 
 	/**

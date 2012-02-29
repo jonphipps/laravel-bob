@@ -9,15 +9,17 @@
  * @copyright 	Dayle Rees 2012
  * @license 	MIT License <http://www.opensource.org/licenses/mit>
  */
-class Generators_Alias
+class Generators_Alias extends Generator
 {
 	/**
 	 * Start the generation process.
 	 *
 	 * @return void
 	 */
-	public function generate()
+	public function __construct($args)
 	{
-		echo "here we set up the alias";
+		parent::__construct($args);
+
+		Common::log('{g}Next Version! {w}I promise! {y} ;)');
 	}
 }

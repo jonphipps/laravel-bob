@@ -12,21 +12,6 @@
 class Bob_Build_Task extends Task
 {
 	/**
-	 * The default command, show help.
-	 *
-	 * @var string
-	 */
-	private $_command = 'help';
-
-	/**
-	 * Arguments to the command.
-	 *
-	 * @var array
-	 */
-	private $_args = array();
-
-
-	/**
 	 * run() is the start-point of the CLI request, the
 	 * first argument specifies the command, and sub-sequent
 	 * arguments are passed as arguments to the chosen generator.
@@ -38,61 +23,38 @@ class Bob_Build_Task extends Task
 	{
 		if (! count($arguments)) $this->_help();
 
-		Common::settings();
-
 		// assign the params
-		$this->_command = $arguments[0];
-		$this->_args = array_slice($arguments, 1);
+		$command = ($arguments[0] !== '') ? $arguments[0] : 'help';
+		$args = array_slice($arguments, 1);
 
-		// fire off the navigation
-		$this->_navigate();
-	}
-
-	/**
-	 * Determine the active command and fire off
-	 * a suitable generation handler.
-	 *
-	 * @return void
-	 */
-	private function _navigate()
-	{
-		Common::log(chr(27).'[36m'.'-- Can we build it? --');
-
-		switch($this->_command)
+		switch($command)
 		{
 			case "controller":
 			case "c":
-				$c = new Generators_Controller($this->_args);
-				$c->generate();
+				new Generators_Controller($args);
 				break;
 			case "model":
 			case "m":
-				$m = new Generators_Model($this->_args);
-				$m->generate();
+				new Generators_Model($args);
 				break;
 			case "alias":
-				$a = new Generators_Alias($this->_args);
-				$a->generate();
+				new Generators_Alias($args);
 				break;
 			case "migration":
 			case "mig":
-				IoC::resolve('task: migrate')->make($this->_args);
+				IoC::resolve('task: migrate')->make($args);
 				break;
 			case "bundle":
 			case "b":
-				$b = new Generators_Bundle($this->_args);
-				$b->generate();
+				new Generators_Bundle($args);
 				break;
 			case "test":
 			case "t":
-				$t = new Generators_Test($this->_args);
-				$t->generate();
+				new Generators_Test($args);
 				break;
 			default:
 				$this->_help();
 				break;
-
-
 		}
 	}
 

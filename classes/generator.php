@@ -76,6 +76,13 @@ class Generator
 	protected $arguments;
 
 	/**
+	 * Used to write or append new files and folders.
+	 *
+	 * @var Writer
+	 */
+	protected $writer;
+
+	/**
 	 * Determine class names, identifiers and arguments based on the args
 	 * passed by the build script.
 	 *
@@ -84,6 +91,9 @@ class Generator
 	 */
 	public function __construct($args)
 	{
+		// we need a writer object for file system changes
+		$this->writer = new Writer();
+
 		// set default args
 		$this->args = $args;
 

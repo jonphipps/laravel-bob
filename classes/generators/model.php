@@ -19,19 +19,14 @@ class Generators_Model extends Generator
 	private $_timestamps = '';
 
 	/**
-	 * An array of files to write after generation.
-	 *
-	 * @var array
-	 */
-	private $_files = array();
-
-	/**
 	 * Start the generation process.
 	 *
 	 * @return void
 	 */
-	public function generate()
+	public function __construct($args)
 	{
+		parent::__construct($args);
+
 		// we need a controller name
 		if ($this->class == null)
 			Common::error('You must specify a model name.');
@@ -42,8 +37,8 @@ class Generators_Model extends Generator
 		// start the generation
 		$this->_model_generation();
 
-		// save the resulting array
-		Common::save($this->_files);
+		// write filesystem changes
+		$this->writer->write();
 	}
 
 	/**
@@ -122,16 +117,13 @@ class Generators_Model extends Generator
 		// in the model template
 		$markers['#RELATIONS#'] = $relationships_source;
 
-		// add the replaced model to the files array
-		$model = array(
-			'type'		=> 'Model',
-			'name'		=> $prefix.$this->class_prefix.$this->class,
-			'location'	=> $this->bundle_path.'/models/'.$this->class_path.$this->lower.EXT,
-			'content'	=> Common::replace_markers($markers, $template)
+		// add the generated model to the writer
+		$this->writer->create_file(
+			'Model',
+			$prefix.$this->class_prefix.$this->class,
+			$this->bundle_path.'models/'.$this->class_path.$this->lower.EXT,
+			Common::replace_markers($markers, $template)
 		);
-
-		// store the file ready for saving
-		$this->_files[] = $model;
 	}
 
 	/**
@@ -142,9 +134,7 @@ class Generators_Model extends Generator
 	 */
 	private function _settings()
 	{
-		if(isset($_SERVER['CLI']['TIMESTAMPS']))
-			$this->_timestamps = "\tpublic static \$timestamps = true;\n\n";
-		if(isset($_SERVER['CLI']['TS']))
+		if(Common::config('timestamps') or Common::config('t'))
 			$this->_timestamps = "\tpublic static \$timestamps = true;\n\n";
 	}
 }

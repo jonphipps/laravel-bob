@@ -12,28 +12,36 @@
 class Common
 {
 	/**
-	 * Force overwrite of existing files.
-	 * 
-	 * @var boolean
-	 */
-	private static $_force = false;
-
-	/**
-	 * Preview changes without writing files.
-	 * 
-	 * @var boolean
-	 */
-	private static $_preview = false;
-
-	/**
 	 * Log a message to the CLI with a \r\n
 	 *
 	 * @param $message string The message to display.
 	 * @return void
 	 */
-	public static function log($message)
+	public static function log($message, $echo = true)
 	{
-		echo $message . PHP_EOL;
+		// swap colors for codes, will add a windows conditional later
+		$colors = array(
+			'{r}' 	=> chr(27).'[31m',
+			'{c}' 	=> chr(27).'[36m',
+			'{y}' 	=> chr(27).'[33m',
+			'{g}' 	=> chr(27).'[32m',
+			'{w}' 	=> chr(27).'[37m'
+		);
+
+		foreach($colors as $key => $color)
+		{
+			$message = str_replace($key, $color, $message);
+		}
+
+
+		if ($echo == true)
+		{
+			echo $message . PHP_EOL;
+		}
+		else
+		{
+			return $message . PHP_EOL;
+		}
 	}
 
 	/**
@@ -42,8 +50,7 @@ class Common
 	 */
 	public static function error($message)
 	{
-		Common::log(chr(27).'[31m'.$message);
-		throw new \Exception(chr(27).'[36m'.'-- Apparently not! :( --' . PHP_EOL);
+		throw new \Exception(static::log('{r}'.$message.PHP_EOL.'{c}-- Apparently not! :( --', false));
 	}
 
 	/**
@@ -92,106 +99,21 @@ class Common
 	}
 
 	/**
-	 * Iterate through a files array, creating files in
-	 * different locations where neccessary.
+	 * Retrieve a command line switch, as false of not set,
+	 * true if set with no value, and string if given a value.
 	 *
-	 * <code>
-	 * $files[] = array(
-	 * 		'type' 		=> 'View',
-	 *   	'name' 		=> 'Descriptive identifier shown to terminal.',
-	 *    	'location' 	=> 'location/to/save/the/file.php',
-	 *     	'content' 	=> 'the string content of the file'
-	 * );
-	 * </code>
-	 *
-	 * @param array The files array.
-	 * @return void
+	 * @param string The switch name to query, lowercase.
+	 * @return mixed Bool or value.
 	 */
-	public static function save($files = array())
+	public static function config($key)
 	{
-		/** TODO sort array by type uasort() with cb */
-
-		// for each file in the files array
-		foreach($files as $file)
+		if(isset($_SERVER['CLI'][Str::upper($key)]))
 		{
-			// force the directory creation
-			if(! static::$_preview) @mkdir(dirname($file['location']) , 0777, true);
-
-			if(@File::exists($file['location']) && (static::$_force == false))
-			{
-				static::log(chr(27).'[36m'.'('.chr(27).'[33m'.'~'.chr(27).'[36m'.') '.chr(27).'[33m'.$file['type'].chr(27).'[37m'."\t\t".$file['name'].' (Exists - Skipped)');
-				continue;
-			}
-			
-			// if we have preview enabled, we don't want to write files
-			if(! static::$_preview)
-			{
-				// try to create the file
-				if(@File::put($file['location'], $file['content']))
-				{
-					// log something pretty to the terminal
-					static::log(chr(27).'[36m'.'('.chr(27).'[32m'.'+'.chr(27).'[36m'.') '.chr(27).'[33m'.$file['type'].chr(27).'[37m'."\t\t".$file['name']);
-				}
-				else
-				{
-					static::error('Could not write to location : ' .$file['location']);
-				}
-			}
-			else
-			{
-					static::log(chr(27).'[36m'.'('.chr(27).'[32m'.'+'.chr(27).'[36m'.') '.chr(27).'[33m'.$file['type'].chr(27).'[37m'."\t\t".$file['name']);				
-			}
-
+			return ($_SERVER['CLI'][Str::upper($key)] == '') ? true : $_SERVER['CLI'][Str::upper($key)];
 		}
-
-		static::log(chr(27).'[36m'.'-- Yes we can! --');
-	}
-
-	/**
-	 * Copy a directory of templates to a destination.
-	 *
-	 * <code>
-	 * $dirs[] = array(
-	 * 		'type' 			=> 'View',
-	 *   	'name' 			=> 'Descriptive identifier shown to terminal.',
-	 *    	'source' 		=> 'the/location/to/copy/from',
-	 *     	'destination' 	=> 'the/location/to/copy/to'
-	 * );
-	 * </code>
-	 *
-	 * @param array The array of files to copy.
-	 * @return void
-	 */
-	public static function move_template($dirs = array())
-	{
-		// loop through dirs to copy
-		foreach ($dirs as $dir)
+		else
 		{
-			if(! is_dir($dir['destination']))
-			{
-				if(! static::$_preview) File::cpdir($dir['source'], $dir['destination']);
-				// log something pretty to the terminal
-				static::log('(+) '.$dir['type']."\t\t".$dir['name']);
-			}
-			else
-			{
-				// we cant copy if its already there
-				static::error('The bundle \''.$dir['name'].'\' already exists.');
-			}
+			return false;
 		}
-	}
-
-	/**
-	 * Set static vars based on CLI switches.
-	 * 
-	 * @return void
-	 */
-	public static function settings()
-	{
-		if(isset($_SERVER['CLI']['FORCE']))
-			static::$_force = true;
-
-		if(isset($_SERVER['CLI']['PREVIEW']))
-			static::$_preview = true;
 	}
 }
