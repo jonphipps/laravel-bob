@@ -32,6 +32,12 @@ And to activate the bundle, simply add `'bob'` to the array in your `application
 return array('bob', ... other stuff ..);
 ```
 
+To enable colored output on Windows, please install ansicon : 
+
+[ansicon on github](https://github.com/adoxa/ansicon)
+
+Thanks to Taylor Otwell for the link!
+
 ---
 
 ##Usage
