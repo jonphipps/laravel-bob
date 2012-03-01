@@ -89,6 +89,23 @@ class Bob_Build_Task extends Task
 	 */
 	private function _help()
 	{
-		Common::error('Please specify a command.');
+		Common::log('{w}Usage :');
+		Common::log("\t{w}bob {c}<command> {g}[args] {y}[options ..]\n");
+		Common::log('{w}Commands :');
+		Common::log("\t{c}(c)      controller");
+		Common::log("\t{c}(m)      model");
+		Common::log("\t{c}(v)      view");		
+		Common::log("\t{c}(t)      test");
+		Common::log("\t{c}(ta)     task");
+		Common::log("\t{c}(mig)    migration");
+		Common::log("\t{c}(i)      install");
+		Common::log("\t{c}(b)      bundle");
+		Common::log("\t{c}(co)     config");
+		Common::log("\t{c}(cl)     class");		
+		Common::log("\t{c}(a)      alias");
+		Common::log("\n\n{w}Arguments :");
+		Common::log("\t{g}--force\n\t{w}Force overwrite of existing files and folders.");
+		Common::log("\t{g}--pretend\n\t{w}Show the result of a generation without writing to the filesystem.");																						
+		exit();
 	}
 }
