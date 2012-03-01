@@ -67,13 +67,29 @@ class Generators_Controller extends Generator
 		$action_template 	= Common::load_template('controller/action.tpl');
 		$view_template 		= Common::load_template('controller/view.tpl');
 
+		$restful = (strstr(implode(' ', $this->arguments), ':')) ? true : false;
+
 		array_unshift($this->arguments, 'index');
 
 		// loop through our actions
 		foreach ($this->arguments as $action)
 		{
+			$verb = ($restful) ? 'get' :'action';
+
+			if(strstr($action, ':'))
+			{
+				$parts = explode(':', $action);
+
+				if (count($parts) == 2)
+				{
+					$verb = Str::lower($parts[0]);
+					$action = Str::lower($parts[1]);
+				}
+			}
+
 			// add the current action to the markers
 			$markers['#ACTION#'] = Str::lower($action);
+			$markers['#VERB#'] = $verb;
 
 			// append the replaces source
 			$actions_source .= Common::replace_markers($markers, $action_template);
@@ -90,6 +106,7 @@ class Generators_Controller extends Generator
 		// add a marker to replace the actions stub in the controller
 		// template
 		$markers['#ACTIONS#'] = $actions_source;
+		$markers['#RESTFUL#'] = ($restful) ? "\n\tpublic \$restful = true;\n" : '';
 
 		// added the file to be created
 		$this->writer->create_file(
@@ -97,6 +114,11 @@ class Generators_Controller extends Generator
 			$markers['#CLASS#'].'_Controller',
 			$this->bundle_path.'controllers/'.$this->class_path.$this->lower.EXT,
 			Common::replace_markers($markers, $template)
+		);
+
+		$this->writer->append_to_file(
+			$this->bundle_path.'routes.php',
+			"\n\n// Route for {$markers['#CLASS#']}_Controller\nRoute::controller('{$markers['#LOWERFULL#']}');"
 		);
 	}
 

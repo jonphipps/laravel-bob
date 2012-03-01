@@ -55,6 +55,10 @@ class Bob_Build_Task extends Task
 			case "t":
 				new Generators_Test($args);
 				break;
+			case "task":
+			case "ta":
+				new Generators_Task($args);
+				break;
 			default:
 				$this->_help();
 				break;

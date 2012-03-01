@@ -1,4 +1,4 @@
-	public function action_#ACTION#()
+	public function #VERB#_#ACTION#()
 	{
 		// code here..
 
