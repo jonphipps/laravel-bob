@@ -1,15 +1,22 @@
 <?php
 
 /**
- * Generate a Task class, and individual methods.
+ * Generate a view.
  *
  * @package 	bob
  * @author 		Dayle Rees
  * @copyright 	Dayle Rees 2012
  * @license 	MIT License <http://www.opensource.org/licenses/mit>
  */
-class Generators_Task extends Generator
+class Generators_View extends Generator
 {
+	/**
+	 * The view file extension, can also be blade.php
+	 *
+	 * @var string
+	 */
+	private $_view_extension = EXT;
+
 	/**
 	 * Start the generation process.
 	 *
@@ -19,15 +26,15 @@ class Generators_Task extends Generator
 	{
 		parent::__construct($args);
 
-		// we need a task name
+		// we need a view name
 		if ($this->class == null)
-			Common::error('You must specify a task name.');
+			Common::error('You must specify a view name.');
 
 		// set switches
 		$this->_settings();
 
 		// start the generation
-		$this->_task_generation();
+		$this->_view_generation();
 
 		// write filesystem changes
 		$this->writer->write();
@@ -40,44 +47,24 @@ class Generators_Task extends Generator
 	 *
 	 * @return void
 	 */
-	private function _task_generation()
+	private function _view_generation()
 	{
 		$prefix = ($this->bundle == DEFAULT_BUNDLE) ? '' : Str::classify($this->bundle).'_';
 		$view_prefix = ($this->bundle == DEFAULT_BUNDLE) ? '' : $this->bundle.'::';
 
 		// set up the markers for replacement within source
 		$markers = array(
-			'#CLASS#'		=> $prefix.$this->class_prefix.$this->class,
-			'#LOWER#'		=> $this->lower,
 			'#LOWERFULL#'	=> $view_prefix.Str::lower(str_replace('/','.', $this->class_path).$this->lower)
 		);
 
-		// loud our task template
-		$template = Common::load_template('task/task.tpl');
-
-		// holder for methods source, and base template for methods
-		$methods_source 	= '';
-		$method_template 	= Common::load_template('task/method.tpl');
-
-		// loop through our methods
-		foreach ($this->arguments as $method)
-		{
-			// add the current method to the markers
-			$markers['#METHOD#'] = Str::lower($method);
-
-			// append the replaces source
-			$methods_source .= Common::replace_markers($markers, $method_template);
-		}
-
-		// add a marker to replace the methods stub in the task
-		// template
-		$markers['#METHODS#'] = $methods_source;
+		// loud our view template
+		$template = Common::load_template('view/view.tpl');
 
 		// added the file to be created
 		$this->writer->create_file(
-			'Task',
-			$markers['#CLASS#'].'_Task',
-			$this->bundle_path.'tasks/'.$this->class_path.$this->lower.EXT,
+			'View',
+			$this->class_path.$this->lower.EXT,
+			$this->bundle_path.'views/'.$this->class_path.$this->lower.EXT,
 			Common::replace_markers($markers, $template)
 		);
 	}
@@ -90,6 +77,6 @@ class Generators_Task extends Generator
 	 */
 	private function _settings()
 	{
-
+		if(Common::config('blade')) $this->_view_extension = BLADE_EXT;
 	}
 }

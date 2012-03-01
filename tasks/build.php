@@ -59,6 +59,22 @@ class Bob_Build_Task extends Task
 			case "ta":
 				new Generators_Task($args);
 				break;
+			case "class":
+			case "cl":
+				new Generators_Class($args);
+				break;
+			case "install":
+			case "i":
+				IoC::resolve('task: bundle')->install($args);
+				break;
+			case "config":
+			case "co":
+				new Generators_Config($args);
+				break;
+			case "view":
+			case "v":
+				new Generators_View($args);
+				break;
 			default:
 				$this->_help();
 				break;

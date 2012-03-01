@@ -1,14 +1,14 @@
 <?php
 
 /**
- * Generate a Task class, and individual methods.
+ * Generate a generic Class, and individual methods.
  *
  * @package 	bob
  * @author 		Dayle Rees
  * @copyright 	Dayle Rees 2012
  * @license 	MIT License <http://www.opensource.org/licenses/mit>
  */
-class Generators_Task extends Generator
+class Generators_Class extends Generator
 {
 	/**
 	 * Start the generation process.
@@ -19,15 +19,15 @@ class Generators_Task extends Generator
 	{
 		parent::__construct($args);
 
-		// we need a task name
+		// we need a class name
 		if ($this->class == null)
-			Common::error('You must specify a task name.');
+			Common::error('You must specify a class name.');
 
 		// set switches
 		$this->_settings();
 
 		// start the generation
-		$this->_task_generation();
+		$this->_class_generation();
 
 		// write filesystem changes
 		$this->writer->write();
@@ -40,7 +40,7 @@ class Generators_Task extends Generator
 	 *
 	 * @return void
 	 */
-	private function _task_generation()
+	private function _class_generation()
 	{
 		$prefix = ($this->bundle == DEFAULT_BUNDLE) ? '' : Str::classify($this->bundle).'_';
 		$view_prefix = ($this->bundle == DEFAULT_BUNDLE) ? '' : $this->bundle.'::';
@@ -52,12 +52,12 @@ class Generators_Task extends Generator
 			'#LOWERFULL#'	=> $view_prefix.Str::lower(str_replace('/','.', $this->class_path).$this->lower)
 		);
 
-		// loud our task template
-		$template = Common::load_template('task/task.tpl');
+		// loud our class template
+		$template = Common::load_template('class/class.tpl');
 
 		// holder for methods source, and base template for methods
 		$methods_source 	= '';
-		$method_template 	= Common::load_template('task/method.tpl');
+		$method_template 	= Common::load_template('class/method.tpl');
 
 		// loop through our methods
 		foreach ($this->arguments as $method)
@@ -69,15 +69,15 @@ class Generators_Task extends Generator
 			$methods_source .= Common::replace_markers($markers, $method_template);
 		}
 
-		// add a marker to replace the methods stub in the task
+		// add a marker to replace the methods stub in the class
 		// template
 		$markers['#METHODS#'] = $methods_source;
 
 		// added the file to be created
 		$this->writer->create_file(
-			'Task',
-			$markers['#CLASS#'].'_Task',
-			$this->bundle_path.'tasks/'.$this->class_path.$this->lower.EXT,
+			'Class',
+			$markers['#CLASS#'],
+			$this->bundle_path.$this->class_path.$this->lower.EXT,
 			Common::replace_markers($markers, $template)
 		);
 	}
