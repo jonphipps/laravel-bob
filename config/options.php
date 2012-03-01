@@ -9,4 +9,10 @@ return array(
 	// within this directory are loaded before the template_path
 	'project_templates' 	=> path('app').'bob/',
 
+	// use ansi support for terminal colors, options are :
+	// 'auto' - detect support by OS
+	// true - use ansi
+	// false - disable ansi
+	'ansi_support'			=> 'auto',
+
 );

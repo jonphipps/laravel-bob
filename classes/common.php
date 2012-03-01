@@ -12,6 +12,13 @@
 class Common
 {
 	/**
+	 * Use ANSI coloring for output.
+	 *
+	 * @var mixed
+	 */
+	private static $_ansi = true;
+
+	/**
 	 * Log a message to the CLI with a \r\n
 	 *
 	 * @param $message string The message to display.
@@ -28,10 +35,21 @@ class Common
 			'{w}' 	=> chr(27).'[37m'
 		);
 
-		foreach($colors as $key => $color)
+		if(static::$_ansi)
 		{
-			$message = str_replace($key, $color, $message);
+			foreach($colors as $key => $color)
+			{
+				$message = str_replace($key, $color, $message);
+			}
 		}
+		else
+		{
+			foreach($colors as $key => $color)
+			{
+				$message = str_replace($key, '', $message);
+			}
+		}
+
 
 
 		if ($echo == true)
@@ -114,6 +132,23 @@ class Common
 		else
 		{
 			return false;
+		}
+	}
+
+	/**
+	 * Set the appropriate ANSI setting, disabled for windows.
+	 *
+	 * @return void
+	 */
+	public static function detect_windows()
+	{
+		static::$_ansi = Config::get('bob::options.ansi_support');
+
+		if(static::$_ansi === 'auto')
+		{
+			static::$_ansi = true;
+			if(defined(PHP_OS) and strstr(PHP_OS, 'WINNT')) static::$_ansi = false;
+			if(strstr(php_uname(), 'Windows')) static::$_ansi = false;
 		}
 	}
 }

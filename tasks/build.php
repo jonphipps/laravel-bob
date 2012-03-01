@@ -23,6 +23,9 @@ class Bob_Build_Task extends Task
 	{
 		if (! count($arguments)) $this->_help();
 
+		// setup ansi support
+		Common::detect_windows();
+
 		// assign the params
 		$command = ($arguments[0] !== '') ? $arguments[0] : 'help';
 		$args = array_slice($arguments, 1);
