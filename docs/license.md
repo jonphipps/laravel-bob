@@ -6,7 +6,7 @@ fork-path: https://github.com/daylerees
 
 MIT License
 
-Copyright (c) <2012> <Dayle Rees> <me@daylerees.com>
+Copyright (c) -2012- -Dayle Rees- -me@daylerees.com-
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in
