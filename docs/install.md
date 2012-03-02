@@ -8,12 +8,10 @@ fork-path: https://github.com/daylerees
 
 To install Bob, from the base of your laravel project simply type :
 
-```
-php artisan bundle:install bob
-```
+
+	php artisan bundle:install bob
+
 
 And to activate the bundle, simply add `'bob'` to the array in your `application/bundles.php` :
 
-{% highlight php startinline %}
-return array('bob', ... other stuff ..);
-{% endhighlight %}
+	return array('bob', ... other stuff ..);
