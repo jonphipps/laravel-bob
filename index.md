@@ -10,6 +10,8 @@ Bob can be used to generate all kinds of useful files and classes, for use with 
 
 If you have used ruby on rails' generate, or FuelPHP's Oil you will be familiar with its syntax.
 
+![Bob screenshot](/laravel-bob/img/bobscreen.png)
+
 Bob was created by Dayle Rees, with thanks to [Phill Sparks](http://phills.me.uk), [Eric Barnes](http://ericlbarnes.com) and [Taylor Otwell](https://github.com/taylorotwell) for all the help and support.
 
 ###Latest Changes:
