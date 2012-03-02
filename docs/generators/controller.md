@@ -57,7 +57,7 @@ class Mycontroller_Controller extends Base_Controller {
 
 with the following view created for each action :
 
-{% highlight php startinline %}
+{% highlight html startinline %}
 <h1>mycontroller.second</h1>
 
 <p>This view has been auto-generated to accompany the Mycontroller_Controller's action_second()</p>
