@@ -12,9 +12,7 @@ To generate Controllers with Actions, View files and Route definitions, simply p
 	bob controller [args] <controller_name> [actions ...]
 
 <div class="alert alert-info">
-
-**Note :** *You can use the shortcut `bob c` instead of `bob controller` to save characters.*
-
+<strong>Note :</strong> You can use the shortcut `bob c` instead of `bob controller` to save characters.
 </div>
 
 ##Arguments
