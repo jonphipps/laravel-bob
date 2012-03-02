@@ -6,8 +6,6 @@ fork-path: https://github.com/daylerees
 
 #Bob
 
-![Bob Logo](http://daylerees.com/boblogo.png)
-
 Bob can be used to generate all kinds of useful files and classes, for use with the wonderfully fabulous Laravel PHP Framework, authored by Taylor Otwell.
 
 If you have used ruby on rails' generate, or FuelPHP's Oil you will be familiar with its syntax.
