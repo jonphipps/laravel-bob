@@ -12,11 +12,12 @@ To generate Controllers with Actions, View files and Route definitions, simply p
 	bob controller [args] <controller_name> [actions ...]
 
 <div class="alert alert-info">
-<strong>Note :</strong> You can use the shortcut <strong>bob c<strong> instead of <strong>bob controller<strong> to save characters.
+<strong>Note :</strong> You can use the shortcut <strong>bob c</strong> instead of <strong>bob controller</strong> to save characters.
 </div>
 
 ##Arguments
----
+
+
 `--blade` Generate view files with the Blade extension (.blade.php).
 
 
