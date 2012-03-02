@@ -18,45 +18,49 @@ For example :
 
 will produce :
 
-	<?php
+{% highlight php startinline %}
+<?php
 
-	class Mycontroller_Controller extends Base_Controller {
+class Mycontroller_Controller extends Base_Controller {
 
-		public function action_index()
-		{
-			// code here..
+	public function action_index()
+	{
+		// code here..
 
-			return View::make('mycontroller.index');
-		}
-
-		public function action_first()
-		{
-			// code here..
-
-			return View::make('mycontroller.first');
-		}
-
-		public function action_second()
-		{
-			// code here..
-
-			return View::make('mycontroller.second');
-		}
-
-		public function action_third()
-		{
-			// code here..
-
-			return View::make('mycontroller.third');
-		}
-
+		return View::make('mycontroller.index');
 	}
+
+	public function action_first()
+	{
+		// code here..
+
+		return View::make('mycontroller.first');
+	}
+
+	public function action_second()
+	{
+		// code here..
+
+		return View::make('mycontroller.second');
+	}
+
+	public function action_third()
+	{
+		// code here..
+
+		return View::make('mycontroller.third');
+	}
+
+}
+{% endhighlight %}
 
 
 with the following view created for each action :
 
-	<h1>mycontroller.second</h1>
+{% highlight php startinline %}
+<h1>mycontroller.second</h1>
 
-	<p>This view has been auto-generated to accompany the Mycontroller_Controller's action_second()</p>
+<p>This view has been auto-generated to accompany the Mycontroller_Controller's action_second()</p>
+{% endhighlight %}
 
 Use the `--blade` switch anywhere within the command to generate view files with the Blade extension (.blade.php).
