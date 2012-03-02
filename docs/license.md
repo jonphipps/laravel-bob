@@ -1,3 +1,9 @@
+---
+layout: default
+title: Licence
+fork-path: https://github.com/daylerees
+---
+
 MIT License
 
 Copyright (c) <2012> <Dayle Rees> <me@daylerees.com>
