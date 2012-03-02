@@ -6,13 +6,15 @@ fork-path: https://github.com/daylerees
 
 #Controllers
 
+##Usage
 To generate controllers with actions, and view files, simply pass the action names as extra arguments to the `controller` command :
 
 	bob controller [args] <controller_name> [actions ...]
 
-####Arguments
+##Arguments
 
 `--blade` Generate view files with the Blade extension (.blade.php).
+
 
 <div class="alert alert-info">
 
@@ -20,9 +22,7 @@ To generate controllers with actions, and view files, simply pass the action nam
 
 </div>
 
----
-
-Example :
+##Example
 
 	bob c mycontroller first second third
 
