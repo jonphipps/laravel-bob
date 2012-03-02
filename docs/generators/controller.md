@@ -7,20 +7,21 @@ fork-path: https://github.com/daylerees
 #Controllers
 
 ##Usage
-To generate controllers with actions, and view files, simply pass the action names as extra arguments to the `controller` command :
+To generate Controllers with Actions, View files and Route definitions, simply provide a controller name, and pass action names as extra arguments to the `controller` command :
 
 	bob controller [args] <controller_name> [actions ...]
-
-##Arguments
-
-`--blade` Generate view files with the Blade extension (.blade.php).
-
 
 <div class="alert alert-info">
 
 **Note :** *You can use the shortcut `bob c` instead of `bob controller` to save characters.*
 
 </div>
+
+##Arguments
+
+
+`--blade` Generate view files with the Blade extension (.blade.php).
+
 
 ##Example
 
