@@ -1,3 +1,9 @@
+---
+layout: default
+title: Controllers
+fork-path: https://github.com/daylerees
+---
+
 #Controllers
 
 To generate controllers with actions, and view files, simply pass the action names as extra arguments to the `controller` command :
