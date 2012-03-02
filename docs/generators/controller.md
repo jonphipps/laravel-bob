@@ -12,12 +12,11 @@ To generate Controllers with Actions, View files and Route definitions, simply p
 	bob controller [args] <controller_name> [actions ...]
 
 <div class="alert alert-info">
-<strong>Note :</strong> You can use the shortcut `bob c` instead of `bob controller` to save characters.
+<strong>Note :</strong> You can use the shortcut <strong>bob c<strong> instead of <strong>bob controller<strong> to save characters.
 </div>
 
 ##Arguments
-
-
+---
 `--blade` Generate view files with the Blade extension (.blade.php).
 
 
@@ -70,4 +69,10 @@ with the following view created for each action :
 <h1>mycontroller.second</h1>
 
 <p>This view has been auto-generated to accompany the Mycontroller_Controller's action_second()</p>
+{% endhighlight %}
+
+with the following route definition in the appropriate routes.php :
+
+{% highlight php startinline %}
+Route::controller('mycontroller');
 {% endhighlight %}
