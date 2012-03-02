@@ -15,7 +15,9 @@ To generate controllers with actions, and view files, simply pass the action nam
 `--blade` Generate view files with the Blade extension (.blade.php).
 
 <div class="alert alert-info">
+
 **Note :** *You can use the shortcut `bob c` instead of `bob controller` to save characters.*
+
 </div>
 
 ---
