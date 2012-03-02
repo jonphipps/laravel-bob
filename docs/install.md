@@ -14,4 +14,4 @@ To install Bob, from the base of your laravel project simply type :
 
 And to activate the bundle, simply add `'bob'` to the array in your `application/bundles.php` :
 
-	return array('bob', ... other stuff ..);
+	return array('bob', ... possible other stuff ..);
