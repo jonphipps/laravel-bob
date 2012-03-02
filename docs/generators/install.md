@@ -4,7 +4,7 @@ title: Install
 fork-path: https://github.com/daylerees
 ---
 
-#Views
+#Install
 
 ##Usage
 Install is a shortcut to the bundle:install task :

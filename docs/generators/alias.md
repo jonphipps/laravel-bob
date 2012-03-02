@@ -4,7 +4,7 @@ title: Alias
 fork-path: https://github.com/daylerees
 ---
 
-#Views
+#Alias
 
 ##Usage
 
