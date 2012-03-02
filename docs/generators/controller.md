@@ -15,10 +15,18 @@ To generate Controllers with Actions, View files and Route definitions, simply p
 <strong>Note :</strong> You can use the shortcut <strong>bob c</strong> instead of <strong>bob controller</strong> to save characters.
 </div>
 
+Bob generates non-RESTful actions by default, to indicate a restful action, simply prefix the action name with a HTTP verb and a colon. For example `post:aform`.
+
+Any non-prefixed actions on controllers with RESTful actions will be prefixed with `get_`.
+
+To enable RESTful actions without specifying a verb, use the switch `--restful`.
+
 ##Arguments
 
 
 `--blade` Generate view files with the Blade extension (.blade.php).
+
+`--restful` Force RESTful controller actions.
 
 
 ##Example
