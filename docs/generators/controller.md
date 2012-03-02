@@ -10,13 +10,21 @@ To generate controllers with actions, and view files, simply pass the action nam
 
 	bob controller [args] <controller_name> [actions ...]
 
-**Note :** *You can use the shortcut `bob c` instead of `bob controller` to save characters.*
+####Arguments
 
-For example :
+`--blade` Generate view files with the Blade extension (.blade.php).
+
+<div class="alert alert-info">
+**Note :** *You can use the shortcut `bob c` instead of `bob controller` to save characters.*
+</div>
+
+---
+
+Example :
 
 	bob c mycontroller first second third
 
-will produce :
+produces :
 
 {% highlight php startinline %}
 <?php
@@ -62,5 +70,3 @@ with the following view created for each action :
 
 <p>This view has been auto-generated to accompany the Mycontroller_Controller's action_second()</p>
 {% endhighlight %}
-
-Use the `--blade` switch anywhere within the command to generate view files with the Blade extension (.blade.php).
