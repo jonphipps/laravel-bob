@@ -1,87 +1,66 @@
 ---
 layout: default
-title: Controllers
+title: Models
 fork-path: https://github.com/daylerees
 ---
 
-#Controllers
+#Models
 
 ##Usage
-To generate Controllers with Actions, View files and Route definitions, simply provide a controller name, and pass action names as extra arguments to the `controller` command :
+To generate Eloquent models, simply use the `model` command :
 
-	bob controller [args] <controller_name> [actions ...]
+	bob model [args] <model_name> [relationships ...]
 
 <div class="alert alert-info">
-<strong>Note :</strong> You can use the shortcut <strong>bob c</strong> instead of <strong>bob controller</strong> to save characters.
+<strong>Note :</strong> You can use the shortcut <strong>bob m</strong> instead of <strong>bob model</strong> to save characters.
 </div>
 
-Bob generates non-RESTful actions by default, to indicate a restful action, simply prefix the action name with a HTTP verb and a colon. For example `post:aform`.
+Relationships can be defined in the format `relationship_type:object_name` for example :
 
-Any non-prefixed actions on controllers with RESTful actions will be prefixed with `get_`.
+	bob model users has_many:task
 
-To enable RESTful actions without specifying a verb, use the switch `--restful`.
+<div class="alert alert-info">
+<strong>Note :</strong> Always use the singular when generating relationships, if plurals are defined in the laravel <strong>strings.php</strong> file, they will be converted automatically.
+</div>
+
+Here is a list of acceptable relationships, and their shortcuts :
+
+* `has_many` or `hm`
+* `has_one` or `ho`
+* `belongs_to` or `bt`
+* `has_and_belongs_to_many` or `hbm`
+
 
 ##Arguments
 
 
-`--blade` Generate view files with the Blade extension (.blade.php).
+`--timestamps` Add automatic timestamping to your model. Remember to create the updated_at and created_at fields to your database.
 
-`--restful` Force RESTful controller actions.
 
 
 ##Example
 
-	bob c mycontroller first second third
+	bob model user has_many:task belongs_to:profile --timestamps
 
 produces :
 
 {% highlight php startinline %}
 <?php
 
-class Mycontroller_Controller extends Base_Controller {
+class User extends Eloquent\Model {
 
-	public function action_index()
+	public static $timestamps = true;
+
+	public function task()
 	{
-		// code here..
-
-		return View::make('mycontroller.index');
+		return $this->has_many('Task');
 	}
 
-	public function action_first()
+	public function profile()
 	{
-		// code here..
-
-		return View::make('mycontroller.first');
-	}
-
-	public function action_second()
-	{
-		// code here..
-
-		return View::make('mycontroller.second');
-	}
-
-	public function action_third()
-	{
-		// code here..
-
-		return View::make('mycontroller.third');
+		return $this->belongs_to('Profile');
 	}
 
 }
-{% endhighlight %}
 
-
-with the following view created for each action :
-
-{% highlight html startinline %}
-<h1>mycontroller.second</h1>
-
-<p>This view has been auto-generated to accompany the Mycontroller_Controller's action_second()</p>
-{% endhighlight %}
-
-with the following route definition in the appropriate routes.php :
-
-{% highlight php startinline %}
-Route::controller('mycontroller');
 {% endhighlight %}

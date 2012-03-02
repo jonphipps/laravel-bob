@@ -1,6 +1,6 @@
 ---
 layout: default
-title: GitHub Projects
+title: Installation
 fork-path: https://github.com/daylerees
 ---
 

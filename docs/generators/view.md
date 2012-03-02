@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Controllers
+title: Views
 fork-path: https://github.com/daylerees
 ---
 
