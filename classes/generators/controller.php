@@ -94,11 +94,14 @@ class Generators_Controller extends Generator
 			// append the replaces source
 			$actions_source .= Common::replace_markers($markers, $action_template);
 
+			$file_prefix = ($restful) ? $verb.'_' :'';
+
+
 			// add the file to be created
 			$this->writer->create_file(
 				'View',
-				$this->class_path.$this->lower.'/'.Str::lower($action).$this->_view_extension,
-				$this->bundle_path.'views/'.$this->class_path.$this->lower.'/'.Str::lower($action).$this->_view_extension,
+				$this->class_path.$this->lower.'/'.$file_prefix.Str::lower($action).$this->_view_extension,
+				$this->bundle_path.'views/'.$this->class_path.$this->lower.'/'.$file_prefix.Str::lower($action).$this->_view_extension,
 				Common::replace_markers($markers, $view_template)
 			);
 		}
